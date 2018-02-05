@@ -5,6 +5,27 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <link href="css/site.css" rel="stylesheet" type="text/css">
+
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script>
+		// Initialize Firebase
+		var config = {
+			apiKey: "AIzaSyCsaEXo297Mo1Js08CUQ9DzWSYqJDQBdRo",
+			authDomain: "cheessons.firebaseapp.com",
+			databaseURL: "https://cheessons.firebaseio.com",
+			projectId: "cheessons",
+			storageBucket: "cheessons.appspot.com",
+			messagingSenderId: "105788159539"
+		};
+		firebase.initializeApp(config);
+
+		firebase.auth().signInWithEmailAndPassword("andiwillfly@gmail.com", "ward121314")
+            .then(function(user) {
+			console.log(user, 'user!');
+		}).catch(function(error) {
+			console.log(error);
+		});
+    </script>
   </head>
   <body>
     <div id="app">
