@@ -11,7 +11,6 @@
 
 (defn render []
 	[:div
-	 [:div
 	  [:div
 	   [:a {:href (:link (:profile @user_model/user))}
 	    [:img {:src (:url (:data (:picture (:profile @user_model/user))))}]
@@ -19,5 +18,4 @@
 	    ]]
 	   [:h6 "Email: " (:email (:profile @user_model/user))]
 	   [:h6 "Gender: " (:gender (:profile @user_model/user))]
-	   ]
 	 ])
