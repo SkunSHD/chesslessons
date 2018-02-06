@@ -1,5 +1,6 @@
 (ns chesslessons.components.admin.components
 	(:require
+		[chesslessons.firebase :as fbs]
 		[reagent.core :refer [atom cursor]]
 ;		Models
 		[chesslessons.admin-model :as admin_model]
@@ -44,6 +45,7 @@
 ; ==================
 ; Components
 (defn render_login_form []
+	(log (str @admin_model/admin) 233)
 	[:form
 	 [:h1.h3.mb-3.font-weight-normal "Admin sign in"]
 	
@@ -61,6 +63,10 @@
 	                        :required true
 	                        :on-change -password_on_change
 	                        :type "password"}]
+	  ]
+	
+	 [:div.form-group
+	  [:img {:src "https://i.stack.imgur.com/ZW4QC.png" :onClick admin_model/admin_facebook_auth :style {:cursor "pointer"} }]
 	  ]
 	 
 	 (if-not (empty? @admin_model/sign_in_error_msg) [:p @admin_model/sign_in_error_msg])

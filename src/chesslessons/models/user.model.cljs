@@ -24,7 +24,6 @@
 		 :isNewUser (aget new_user "additionalUserInfo" "isNewUser")
 		 :providerId (aget new_user "additionalUserInfo" "providerId")
          }]
-		(log new_user 42)
 		formatted_user))
 
 

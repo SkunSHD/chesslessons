@@ -1,6 +1,6 @@
 (ns chesslessons.components.sign_in.components
 	(:require
-		[chesslessons.firebase :as fbs :refer [firebase]]
+		[chesslessons.firebase :as fbs]
 ))
 
 
