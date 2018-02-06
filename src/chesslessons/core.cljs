@@ -4,6 +4,9 @@
 		[chesslessons.firebase :as fbs :refer [firebase]]
 ;       Models
 		[chesslessons.user-model :as user_model]
+;		Components
+		[chesslessons.components.sign_in.components :as sign_in_components]
+		[chesslessons.components.profile.components :as profile_components]
 ))
 
 (def log (.-log js/console))
@@ -16,12 +19,16 @@
 
 ;; -------------------------
 ;; Views
+(defn render_container []
+	[:div.text-center.container
+	 (if (nil? @user_model/user)
+		 [sign_in_components/render]
+		 [profile_components/render])
+	 ])
+
+
 (defn home-page []
-	(log "USER!3" (str @user_model/user))
-;	(fbs/sign_in_with_email_and_password "andiwillfly@gmail.com", "ward121314")
-  [:div
-   [:button { :onClick fbs/facebook_auth } "facebook auth"]
-   [:h2 "Welcome to Reage321nt3"]])
+  [render_container])
 
 
 ;; -------------------------
