@@ -55,3 +55,18 @@
 	        facebook_auth_error))
 
 
+; ==================
+; Google
+(def google_auth_provider (new (.-GoogleAuthProvider (.-auth firebase))))
+
+
+(defn google_auth_error [error]
+	(log error)
+	(if (=(.-code error) "auth/account-exists-with-different-credential")
+		(facebook_fect_provider_for_email (.-email error) (.-credential error))))
+
+
+(defn google_auth []
+	(.catch (.then
+		(.signInWithPopup (auth) google_auth_provider) user_model/set_user)
+			google_auth_error))
