@@ -65,11 +65,7 @@
 	                        :on-change -password_on_change
 	                        :type "password"}]
 	  ]
-	
-	 [:div.form-group
-	  [:img {:src "https://i.stack.imgur.com/ZW4QC.png" :onClick admin_model/admin_facebook_auth :style {:cursor "pointer"} }]
-	  ]
-	 
+
 	 (if-not (empty? @admin_model/sign_in_error_msg) [:p @admin_model/sign_in_error_msg])
 	
 	 [:button.btn.btn-primary {:on-click -on_submit_press} "Sign in" ]
@@ -80,4 +76,4 @@
 	(log "admin: " @admin_model/admin)
 	 [:div
 	   	[:h1 "admin container"]
-	  	[:button.btn.btn-secondary {:on-click #(db/some-foo "fbs/ref")} "Get firebase data"]])
+	  	[:button.btn.btn-secondary {:on-click #(db/save-current-user)} "Get firebase data"]])

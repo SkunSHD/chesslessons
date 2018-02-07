@@ -1,9 +1,11 @@
 (ns chesslessons.firebase.db-connect
-	)
+	(:require
+		[chesslessons.firebase :as fb]))
 
 (def log (.-log js/console))
 
-(def db (.database js/firebase))
+(def db-ref (.database js/firebase))
 
-(defn some-foo [str-obj]
-	(log db))
+(defn save-current-user []
+	(aget (fb/auth) "currentUser" "uid")
+	(log db-ref))

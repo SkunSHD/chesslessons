@@ -18,13 +18,19 @@
 
 ; ==================
 ; Private
+
+(defn- -admin-uid [new_admin]
+	(aget new_admin "uid"))
+
+(defn- -admin-email [new_admin]
+	(aget new_admin "email"))
+
+
+; TODO: Fix me
 (defn- -normalize_admin [new_admin]
 	(let [formatted_admin {
-		                     :profile (cljs (aget new_admin "additionalUserInfo" "profile"))
-		                     :credential (cljs_parse (.stringify js/JSON (aget new_admin "credential")))
-		                     :fbs_user (cljs_parse (.stringify js/JSON (aget new_admin "user")))
-		                     :isNewUser (aget new_admin "additionalUserInfo" "isNewUser")
-		                     :providerId (aget new_admin "additionalUserInfo" "providerId")
+							 :uid (-admin-uid new_admin)
+							 :email (-admin-email new_admin)
 		                     }]
 		formatted_admin))
 
@@ -41,13 +47,6 @@
 (defn sign_in_admin [email password]
 	(.catch (.then
 	(fbs/sign_in_with_email_and_password email password)
-			(fn [admin] (set_admin {:fbs_user (cljs_parse (.stringify js/JSON admin))})))
+			(fn [new_admin] (set_admin (-normalize_admin new_admin)) (log 42 @admin)))
 	        (fn [error] (set_sign_in_error_msg (.-message error)))
-	        ))
-
-
-(defn admin_facebook_auth []
-	(.catch (.then  (.signInWithPopup (fbs/auth)
-	        fbs/facebook_auth_provider) (fn [admin] (set_admin (-normalize_admin admin))))
-	        (fn [e] (log "B ERROR!" e))
 	        ))
