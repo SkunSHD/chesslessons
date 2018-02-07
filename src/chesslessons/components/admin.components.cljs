@@ -72,3 +72,8 @@
 	
 	 [:button.btn.btn-primary {:on-click -on_submit_press} "Sign in" ]
 	 ])
+
+
+(defn render_admin_container []
+	(log "admin: " @admin_model/admin)
+	[:div "admin container"])

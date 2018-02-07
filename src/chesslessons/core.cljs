@@ -11,9 +11,6 @@
 		[chesslessons.admin-model :as admin_model]
 ;		Components
 		[chesslessons.components.nav.components :as nav_components]
-		[chesslessons.components.sign_in.components :as sign_in_components]
-		[chesslessons.components.profile.components :as profile_components]
-		[chesslessons.components.admin.components :as admin_components]
 ))
 
 (def log (.-log js/console))
@@ -30,14 +27,10 @@
 	[:div
 	 [nav_components/render_nav]
 	 [:div.text-center.container
-	  [:button {:onClick #(nav! "/admin")} "go to admin page"]
 	  [layout/render]
 	  [:br]
 	  [:hr]
 	  [:br]
-	  (if (nil? @user_model/user)
-		  [sign_in_components/render]
-		  [profile_components/render])
 	  ]
 	 ])
 
