@@ -4,6 +4,8 @@
 		[reagent.core :refer [atom cursor]]
 ;		Models
 		[chesslessons.admin-model :as admin_model]
+;       Utils
+		[chesslessons.firebase.db-connect :as db]
 ))
 
 
@@ -76,4 +78,6 @@
 
 (defn render_admin_container []
 	(log "admin: " @admin_model/admin)
-	[:div "admin container"])
+	 [:div
+	   	[:h1 "admin container"]
+	  	[:button.btn.btn-secondary {:on-click #(db/some-foo "fbs/ref")} "Get firebase data"]])

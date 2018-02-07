@@ -3,7 +3,7 @@
 		[reagent.core :refer [atom cursor]]
 ;		Models
 		[chesslessons.user-model :as user_model]
-))
+		))
 
 (def log (.-log js/console))
 
