@@ -4,6 +4,8 @@
 		[chesslessons.firebase :as fbs :refer [firebase]]
 ;		History
 		[chesslessons.history :as history :refer [nav!]]
+;		Layout
+		[chesslessons.layout :as layout]
 ;       Models
 		[chesslessons.user-model :as user_model]
 		[chesslessons.admin-model :as admin_model]
@@ -27,13 +29,9 @@
 (defn render_container []
 	[:div
 	 [nav_components/render_nav]
-	 
 	 [:div.text-center.container
-	  [:button {:onClick #(nav! "/admin/42")} "admin page"]
-	  [:div
-	   (if (nil? @admin_model/admin)
-		   [admin_components/render_login_form])
-	   ]
+	  [:button {:onClick #(nav! "/admin")} "go to admin page"]
+	  [layout/render]
 	  [:br]
 	  [:hr]
 	  [:br]

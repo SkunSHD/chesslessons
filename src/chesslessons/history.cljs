@@ -10,6 +10,10 @@
 
 
 ; ==================
+; Atoms
+(def current_page (atom {:name "home_page" :params {} }))
+
+; ==================
 ; We need a function that will get the current path fragment to switch on.
 ; We’ll just use the path and the query string.
 (defn get-token []
@@ -44,11 +48,13 @@
 
 ; ==================
 ; Routes
-(defroute home-page "/" [a b c]
-	(js/console.log "Homepage!" a b c 1))
+(defroute home-page "/" []
+	(reset! current_page {:name "home_page" :params {}})
+	(js/console.log "Homepage!"))
 
-(defroute admin-page "/admin/:id" {:as params}
-	(js/console.log "admin page!" (:id params)))
+(defroute admin-page "/admin" []
+	(reset! current_page {:name "admin_page" :params {}})
+	(js/console.log "admin page!"))
 
 (defroute default-route "*" []
 	(js/console.log (str "unknown route: " (get-token))))

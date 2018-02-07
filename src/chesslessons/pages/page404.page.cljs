@@ -1,4 +1,4 @@
-(ns chesslessons.admin.page
+(ns chesslessons.page404.page
 	(:require
 ;		Models
 		[chesslessons.admin-model :as admin_model]
@@ -8,7 +8,4 @@
 
 
 (defn render []
-	[:div
-	    (if (nil? @admin_model/admin)
-		  [admin_components/render_login_form])
-	 ])
+	[:div "404"])
