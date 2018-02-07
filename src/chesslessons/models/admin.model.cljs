@@ -17,6 +17,12 @@
 
 
 ; ==================
+; Cursors
+(def admin_uid (cursor admin [:uid]))
+(def admin_email (cursor admin [:email]))
+
+
+; ==================
 ; Private
 
 (defn- -admin-uid [new_admin]
