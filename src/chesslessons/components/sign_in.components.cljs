@@ -20,7 +20,6 @@
 
 
 (defn render []
-	(log @is_button_visible "is_button_visible")
 	[:form
 	 [:h1.h3.mb-3.font-weight-normal "Please sign in"]
 	 

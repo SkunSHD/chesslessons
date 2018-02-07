@@ -2,10 +2,13 @@
     (:require
 		[reagent.core :as r]
 		[chesslessons.firebase :as fbs :refer [firebase]]
+;		History
+		[chesslessons.history :as history :refer [nav!]]
 ;       Models
 		[chesslessons.user-model :as user_model]
 		[chesslessons.admin-model :as admin_model]
 ;		Components
+		[chesslessons.components.nav.components :as nav_components]
 		[chesslessons.components.sign_in.components :as sign_in_components]
 		[chesslessons.components.profile.components :as profile_components]
 		[chesslessons.components.admin.components :as admin_components]
@@ -22,19 +25,22 @@
 ;; -------------------------
 ;; Views
 (defn render_container []
-	[:div.text-center.container
-	 [:div
-	  (if (nil? @admin_model/admin)
-		  [admin_components/render_login_form]
-		  [:div "welcome admin!"]
-		  )
+	[:div
+	 [nav_components/render_nav]
+	 
+	 [:div.text-center.container
+	  [:button {:onClick #(nav! "/admin/42")} "admin page"]
+	  [:div
+	   (if (nil? @admin_model/admin)
+		   [admin_components/render_login_form])
+	   ]
+	  [:br]
+	  [:hr]
+	  [:br]
+	  (if (nil? @user_model/user)
+		  [sign_in_components/render]
+		  [profile_components/render])
 	  ]
-	 [:br]
-	 [:hr]
-	 [:br]
-	 (if (nil? @user_model/user)
-		 [sign_in_components/render]
-		 [profile_components/render])
 	 ])
 
 

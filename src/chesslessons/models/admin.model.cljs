@@ -35,8 +35,7 @@
 	(reset! sign_in_error_msg new_msg))
 
 (defn set_admin [new_admin]
-	(reset! admin new_admin)
-	(log (str (:fbs_user @admin)) "34!33!!"))
+	(reset! admin new_admin))
 
 
 (defn sign_in_admin [email password]

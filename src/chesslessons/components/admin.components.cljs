@@ -45,7 +45,6 @@
 ; ==================
 ; Components
 (defn render_login_form []
-	(log (str @admin_model/admin) 233)
 	[:form
 	 [:h1.h3.mb-3.font-weight-normal "Admin sign in"]
 	
