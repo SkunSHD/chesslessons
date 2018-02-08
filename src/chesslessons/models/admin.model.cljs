@@ -2,6 +2,8 @@
 	(:require
 		[reagent.core :refer [atom cursor]]
 		[chesslessons.firebase :as fbs]
+;		Utils
+		[chesslessons.normalize-user.utils :refer [normalize_user]]
 ))
 
 
@@ -22,24 +24,6 @@
 (def admin_email (cursor admin [:email]))
 
 
-; ==================
-; Private
-
-(defn- -admin-uid [new_admin]
-	(aget new_admin "uid"))
-
-(defn- -admin-email [new_admin]
-	(aget new_admin "email"))
-
-
-; TODO: Fix me
-(defn- -normalize_admin [new_admin]
-	(let [formatted_admin {
-							 :uid (-admin-uid new_admin)
-							 :email (-admin-email new_admin)
-		                     }]
-		formatted_admin))
-
 
 ; ==================
 ; Public
@@ -53,6 +37,6 @@
 (defn sign_in_admin [email password]
 	(.catch (.then
 	(fbs/sign_in_with_email_and_password email password)
-			(fn [new_admin] (set_admin (-normalize_admin new_admin)) (log 42 @admin)))
+			(fn [new_admin] (set_admin (normalize_user new_admin))))
 	        (fn [error] (set_sign_in_error_msg (.-message error)))
 	        ))
