@@ -1,6 +1,7 @@
 (ns chesslessons.user-model
 	(:require
 		[reagent.core :refer [atom cursor]]
+		[chesslessons.firebase.db :as db]
 ))
 
 (def log (.-log js/console))
@@ -17,6 +18,7 @@
 ; ==================
 ; Private
 (defn- -normalize_user [new_user]
+	(log "before " new_user)
 	(let [formatted_user {
 		 :profile (cljs (aget new_user "additionalUserInfo" "profile"))
 		 :credential (cljs_parse (.stringify js/JSON (aget new_user "credential")))
@@ -26,9 +28,14 @@
          }]
 		formatted_user))
 
+(defn- -save_in_firebase [formatted_user]
+	(db/save_user formatted_user))
 
 
 ; ==================
 ; Public
 (defn set_user [new_user]
-	(reset! user (-normalize_user new_user)))
+	(let [formatted_user (-normalize_user new_user)]
+		((reset! user formatted_user)
+			(-save_in_firebase  formatted_user)))
+	)

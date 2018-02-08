@@ -5,7 +5,7 @@
 ;		Models
 		[chesslessons.admin-model :as admin_model]
 ;       Utils
-		[chesslessons.firebase.db-connect :as db]
+		[chesslessons.firebase.db :as db]
 ))
 
 
@@ -76,4 +76,4 @@
 	(log "admin: " @admin_model/admin)
 	 [:div
 	   	[:h1 "admin container"]
-	  	[:button.btn.btn-secondary {:on-click #(db/save-current-user)} "Get firebase data"]])
+	  	[:button.btn.btn-secondary {:on-click #(log "show db entries")} "Get firebase data"]])

@@ -23,7 +23,7 @@
 	  [:input.form-control {:placeholder "Password" :required true :type "password"}]
 	  ]
 
-	 [:button.btn.btn-primary {:on-click sign_in-model/toggle} "toggle"]
+	 [:button.btn.btn-primary {:on-click sign_in-model/toggle} "Get in touch with me"]
 
 	 [:div.form-group {:style {:display (if @sign_in-model/is_button_visible "block" "none")}}
 	  [:img {:src "https://i.stack.imgur.com/ZW4QC.png" :onClick fbs/facebook_auth :style {:cursor "pointer"} }]

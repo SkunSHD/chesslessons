@@ -28,8 +28,6 @@
 ; ==================
 ; Facebook
 (def facebook_auth_provider (new (.-FacebookAuthProvider (.-auth firebase))))
-; Add phone in response
-(.addScope facebook_auth_provider "user_location")
 
 
 (defn facebook_link_user [user credential]
@@ -44,9 +42,10 @@
 
 
 (defn facebook_auth_error [error]
-	(log error)
+	(log "response" error)
 	(if (=(.-code error) "auth/account-exists-with-different-credential")
-		(facebook_fect_provider_for_email (.-email error) (.-credential error))))
+;		(facebook_fect_provider_for_email (.-email error) (.-credential error))))
+		(log "[CURE]: delete [user] in [firebase/authentification/users] with same email")))
 
 
 (defn facebook_auth []
