@@ -8,8 +8,6 @@
 
 
 (def log (.-log js/console))
-(defn cljs [object] (js->clj object :keywordize-keys true))
-(defn cljs_parse [string] (js->clj (.parse js/JSON string) :keywordize-keys true))
 
 
 ; ==================

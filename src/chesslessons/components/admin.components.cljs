@@ -22,12 +22,12 @@
 ; ==================
 ; Private
 (defn- -email_on_change [e]
-	(admin_model/set_sign_in_error_msg "")
+	(if-not (empty? @admin_model/sign_in_error_msg) (admin_model/set_sign_in_error_msg ""))
 	(reset! email (.-value (.-target e))))
 
 
 (defn- -password_on_change [e]
-	(admin_model/set_sign_in_error_msg "")
+	(if-not (empty? @admin_model/sign_in_error_msg) (admin_model/set_sign_in_error_msg ""))
 	(reset! password (.-value (.-target e))))
 
 
@@ -73,7 +73,6 @@
 
 
 (defn render_admin_container []
-	(log "admin: " @admin_model/admin)
 	 [:div
 	   	[:h1 "admin container"]
 	  	[:button.btn.btn-secondary {:on-click #(log "show db entries")} "Get firebase data"]])
