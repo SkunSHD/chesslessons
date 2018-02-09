@@ -19,8 +19,10 @@
 			.add (:users collection)
 				 (clj->js
 				   {:email (:email user_profile)
-					:uid   (:uid fbs_user)
-					:link  (:link user_profile)})))
+					:link  (:link user_profile)
+					:ava (:url (:data (:picture user_profile)))
+					:location (:name (:location user_profile))
+					:uid   (:uid fbs_user)})))
 		)
 
 
