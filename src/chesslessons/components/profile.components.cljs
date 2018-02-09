@@ -13,7 +13,7 @@
 	[:div
 	  [:div
 	   [:a {:href (:link @user_model/user)}
-	    [:img {:src (:photo @user_model/user)}]
+	    [:img { :width 150 :height 150 :src (:photo @user_model/user)}]
 	    [:h3 "User name:" (:name @user_model/user)]
 	    ]]
 	   [:h6 "Email: " (:email@user_model/user)]

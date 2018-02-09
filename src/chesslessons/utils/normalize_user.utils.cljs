@@ -51,7 +51,7 @@
                       :email (-email user)
                       :name (-displayName user)
                       :photo (-photo user)
-                      :location (-location user)
+;                      :location (-location user)
                       :link (-link user)
                       :gender (-gender user)
                       }]

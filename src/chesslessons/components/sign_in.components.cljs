@@ -31,7 +31,7 @@
 	         :onClick #(fbs/facebook_auth user_model/set_user)
 	         :style {:cursor "pointer"} }]
 	  [:img {:src "https://developers.google.com/+/images/branding/sign-in-buttons/Red-signin_Google_base_44dp.png"
-	         :onClick fbs/google_auth
+	         :onClick #(fbs/google_auth user_model/set_user)
 	         :style {:cursor "pointer" :height 60} }]
 	  ]
 	 ]

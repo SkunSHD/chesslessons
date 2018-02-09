@@ -18,5 +18,6 @@
 ; ==================
 ; Public
 (defn set_user [new_user]
+	(log new_user "NEW!")
 	(reset! user (normalize_user new_user))
 	(db/save_user  (normalize_user new_user)))

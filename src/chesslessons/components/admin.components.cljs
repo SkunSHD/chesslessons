@@ -27,7 +27,7 @@
 
 
 (defn- -password_on_change [e]
-	(if-not (empty? @admin_model/sign_in_error_msg) (admin_model/set_sign_in_error_msg ""))
+	(if @admin_model/sign_in_error_msg (admin_model/set_sign_in_error_msg ""))
 	(reset! password (.-value (.-target e))))
 
 
@@ -49,7 +49,7 @@
 (defn render_login_form []
 	[:form
 	 [:h1.h3.mb-3.font-weight-normal "Admin sign in"]
-	
+
 	 [:div.form-group
 	  [:label.sr-only "Email address"]
 	  [:input.form-control {:placeholder "Email address"
@@ -57,7 +57,7 @@
 	                        :on-change -email_on_change
 	                        :type "email"}]
 	  ]
-	
+
 	 [:div.form-group
 	  [:label.sr-only "Password"]
 	  [:input.form-control {:placeholder "Password"
@@ -67,12 +67,13 @@
 	  ]
 
 	 (if-not (empty? @admin_model/sign_in_error_msg) [:p @admin_model/sign_in_error_msg])
-	
+
 	 [:button.btn.btn-primary {:on-click -on_submit_press} "Sign in" ]
 	 ])
 
 
 (defn render_admin_container []
+	(log "admin: " @admin_model/admin)
 	 [:div
 	   	[:h1 "admin container"]
 	  	[:button.btn.btn-secondary {:on-click #(log "show db entries")} "Get firebase data"]])
