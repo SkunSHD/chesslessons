@@ -8,22 +8,30 @@
 
 (def firestore (.firestore js/firebase))
 
-(def collection {:users (.collection firestore "users")})
+(def collections {
+	 :users (.collection firestore "users")
+})
+
+; ==============
+; Private
+(defn- -user_exists? [users]
+	(not (empty?(filter
+	             (fn [user] (aget user "exists"))
+	             (js->clj (aget users "docs"))))))
 
 
-(defn write_user_data [formatted_user]
-	(let [user_profile (:profile formatted_user) fbs_user (:fbs_user formatted_user)]
-		(
-			.add (:users collection)
-				 (clj->js
-				   {:email (:email user_profile)
-					:link  (:link user_profile)
-					:ava (:url (:data (:picture user_profile)))
-					:location (:name (:location user_profile))
-					:uid   (:uid fbs_user)})))
-		)
+
+(defn get_user_by_uid [uid]
+	(.get (.doc (:users collections) uid)))
+
+(defn get_user_by_email [email]
+	(.get (.where (:users collections) "email" "==" email)))
 
 
-(defn save_user [formatted_user]
-	(write_user_data formatted_user)
+(defn save_user [new_user]
+	(.then (get_user_by_email(:email new_user)) (fn [users]
+		(if (-user_exists? users)
+		  (log "User already exists: " (:email new_user))
+		  (.add (:users collections) (clj->js new_user)) )
+		))
 	)

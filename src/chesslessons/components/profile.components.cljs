@@ -12,10 +12,10 @@
 (defn render []
 	[:div
 	  [:div
-	   [:a {:href (:link (:profile @user_model/user))}
-	    [:img {:src (:url (:data (:picture (:profile @user_model/user))))}]
-	    [:h3 "User name:" (:name (:profile @user_model/user))]
+	   [:a {:href (:link @user_model/user)}
+	    [:img {:src (:photo @user_model/user)}]
+	    [:h3 "User name:" (:name @user_model/user)]
 	    ]]
-	   [:h6 "Email: " (:email (:profile @user_model/user))]
-	   [:h6 "Gender: " (:gender (:profile @user_model/user))]
+	   [:h6 "Email: " (:email@user_model/user)]
+	   [:h6 "Gender: " (:gender @user_model/user)]
 	 ])

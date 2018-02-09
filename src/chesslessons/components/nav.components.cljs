@@ -9,7 +9,6 @@
 (def log (.-log js/console))
 
 (defn render_nav []
-	(log (str (:profile @admin_model/admin)) 12)
 	[:nav.navbar.navbar-primary.bg-primary
 	  (if (:profile @admin_model/admin)
 		  [:span.navbar-text
