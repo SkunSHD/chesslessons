@@ -1,9 +1,7 @@
 (ns chesslessons.firebase.db
 	(:require
 		[reagent.core :refer [atom cursor]]
-		[chesslessons.firebase :as fb]
-		;Models
-		[chesslessons.admin-model :as admin_model]))
+		[chesslessons.firebase :as fb]))
 
 (def log (.-log js/console))
 

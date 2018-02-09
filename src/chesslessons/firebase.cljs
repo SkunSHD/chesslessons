@@ -1,8 +1,6 @@
 (ns chesslessons.firebase
 	(:require
 		[reagent.core :refer [atom cursor]]
-;		Models
-		[chesslessons.user-model :as user_model]
 		))
 
 (def log (.-log js/console))
@@ -48,9 +46,9 @@
 		(log "[CURE]: delete [user] in [firebase/authentification/users] with same email")))
 
 
-(defn facebook_auth []
+(defn facebook_auth [than]
 	(.catch (.then
-		  (.signInWithPopup (auth) facebook_auth_provider) user_model/set_user)
+		  (.signInWithPopup (auth) facebook_auth_provider) than)
 	        facebook_auth_error))
 
 
@@ -65,7 +63,7 @@
 		(facebook_fect_provider_for_email (.-email error) (.-credential error))))
 
 
-(defn google_auth []
+(defn google_auth [than]
 	(.catch (.then
-		(.signInWithPopup (auth) google_auth_provider) user_model/set_user)
+		(.signInWithPopup (auth) google_auth_provider) than)
 			google_auth_error))
