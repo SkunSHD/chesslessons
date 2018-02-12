@@ -32,9 +32,11 @@
 	(reset! admin new_admin))
 
 
+
 (defn sign_in_admin [email password]
 	(.catch (.then
 	(fbs/sign_in_with_email_and_password email password)
 			(fn [new_admin] (set_admin (normalize_user new_admin))))
 	        (fn [error] (set_sign_in_error_msg (.-message error)))
 	        ))
+

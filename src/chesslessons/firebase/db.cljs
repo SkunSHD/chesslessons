@@ -27,6 +27,8 @@
 (defn get_user_by_email [email]
 	(.get (.where (:users collections) "email" "==" email)))
 
+(defn get_user_all []
+	(.get (:users collections)))
 
 (defn save_user [new_user]
 	(log new_user 4242)

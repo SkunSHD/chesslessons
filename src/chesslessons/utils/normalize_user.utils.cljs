@@ -1,6 +1,9 @@
 (ns chesslessons.normalize-user.utils)
 
 
+(def log (.-log js/console))
+
+
 ; ==================
 ; Private
 (defn- -uid [user]
@@ -43,6 +46,13 @@
 	(or
 	 (if (aget user "additionalUserInfo")(aget user "additionalUserInfo" "profile" "gender"))))
 
+(defn js-map [array apply_each]
+  (clj->js
+   (reduce (fn [acc k]
+             (conj acc ({k (apply_each (aget array k))})))
+           []
+           (.keys js/Object array))))
+
 ; ==================
 ; Piblic
 (defn normalize_user [user]
@@ -56,3 +66,6 @@
                       :gender (-gender user)
                       }]
 		normalizeed_user))
+
+(defn normalize_visitors [visitors]
+  (js-map (aget visitors "docs") #(.data %)))

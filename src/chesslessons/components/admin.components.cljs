@@ -4,6 +4,7 @@
 		[reagent.core :refer [atom cursor]]
 ;		Models
 		[chesslessons.admin-model :as admin_model]
+    [chesslessons.visitors-model :as visitors_model]
 ;       Utils
 		[chesslessons.firebase.db :as db]
 ))
@@ -16,6 +17,7 @@
 ; Atoms
 (defonce email (atom ""))
 (defonce password (atom ""))
+
 
 
 
@@ -42,6 +44,13 @@
 		(-on_submit_success e)
 		)
 	)
+
+(defn- -normalized [visitors]
+  (log "maped" ))
+
+
+(defn- -show_all_visitors []
+  (@visitors_model/visitors))
 
 
 ; ==================
@@ -74,6 +83,8 @@
 
 (defn render_admin_container []
 	(log "admin: " @admin_model/admin)
+  (if (not @visitors_model/visitors) (visitors_model/get_visitors))
 	 [:div
 	   	[:h1 "admin container"]
-	  	[:button.btn.btn-secondary {:on-click #(log "show db entries")} "Get firebase data"]])
+      [:p (if (not @visitors_model/visitors) @visitors_model/visitors)]
+	  	[:button.btn.btn-secondary {:on-click -show_all_visitors} "Get firebase data"]])
