@@ -66,6 +66,3 @@
                       :gender (-gender user)
                       }]
 		normalizeed_user))
-
-(defn normalize_visitors [visitors]
-  (js-map (aget visitors "docs") #(.data %)))

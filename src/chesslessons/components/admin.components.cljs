@@ -81,10 +81,21 @@
 	 ])
 
 
+(defn render_admin_visitors []
+	(if-not (empty? @visitors_model/visitors)
+		[:ul {:style {:text-align "left" :list-style "none"}}
+		 (for [visitor @visitors_model/visitors]
+			 ^{:key visitor} [:li
+			                  [:img {:src (:photo visitor) :width 50 :height 50}]
+			                  [:p "email: " (:email visitor)]
+			                  [:p "name: " (:name visitor)]
+			                  [:hr]
+			                  ])])
+	)
+
+
 (defn render_admin_container []
-	(log "admin: " @admin_model/admin)
-  (if (not @visitors_model/visitors) (visitors_model/get_visitors))
 	 [:div
 	   	[:h1 "admin container"]
-      [:p (if (not @visitors_model/visitors) @visitors_model/visitors)]
+	    [render_admin_visitors]
 	  	[:button.btn.btn-secondary {:on-click -show_all_visitors} "Get firebase data"]])
