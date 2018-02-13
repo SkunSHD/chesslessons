@@ -13,11 +13,6 @@
 (defn render_nav []
 	[:nav.navbar.navbar-primary.bg-primary
 	 [:span {:onClick #(nav! "/")}
-	 (if (:profile @admin_model/admin)
-		  [:span.navbar-text
-		    [:img {:src (:url (:data (:picture (:profile @admin_model/admin)))) :width 50 :height 50}]]
-		  [:span.navbar-text
-		   [:img {:src "https://getbootstrap.com/assets/brand/bootstrap-solid.svg" :width 50 :height 50 }]]
-		  )]
-	 (if-not (nil? @admin_model/admin) [:span.navbar-text "welcome, admin!"])
+	  [:img {:src "https://pbs.twimg.com/profile_images/471961293981626368/hGiM_c_R_400x400.png" :width 70 :height 70 }]]
+	  (if-not (nil? @admin_model/admin) [:span.navbar-text "welcome, admin!"])
 	 ])

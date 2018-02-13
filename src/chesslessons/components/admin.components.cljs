@@ -42,15 +42,8 @@
 	(if (or (empty? @email) (empty? @password))
 		(log "Invalid")
 		(-on_submit_success e)
-		)
-	)
+		))
 
-(defn- -normalized [visitors]
-  (log "maped" ))
-
-
-(defn- -show_all_visitors []
-  (@visitors_model/visitors))
 
 
 ; ==================
@@ -115,5 +108,4 @@
 (defn render_admin_container []
 	 [:div
 	   	[:h1 "admin container"]
-	    [render_admin_visitors]
-	  	[:button.btn.btn-secondary {:on-click -show_all_visitors} "Get firebase data"]])
+	    [render_admin_visitors]])

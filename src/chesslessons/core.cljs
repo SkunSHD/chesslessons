@@ -27,11 +27,7 @@
 	[:div
 	 [nav_components/render_nav]
 	 [:div.text-center.container
-	  [layout/render]
-	  [:br]
-	  [:hr]
-	  [:br]
-	  ]
+	  [layout/render]]
 	 ])
 
 
