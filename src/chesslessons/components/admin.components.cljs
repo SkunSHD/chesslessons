@@ -83,7 +83,7 @@
 
 (defn render_admin_visitor_img_src [visitor]
 	(cond
-		(:facebook_link visitor) "http://www.iconarchive.com/download/i49146/yootheme/social-bookmark/social-facebook-box-blue.ico"
+		(:facebook_link visitor) "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/facebook_square-64.png"
 		(:google_link visitor) "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/google_circle_color-64.png"
 		:else nil)
 		)
