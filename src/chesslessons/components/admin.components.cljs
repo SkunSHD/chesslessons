@@ -107,12 +107,9 @@
 
 
 (defn render_admin_visitors []
-	(log @visitors_model/visitors "42")
-	(if-not (empty? @visitors_model/visitors)
-		[:ul {:style {:text-align "left" :list-style "none"}}
-		 (for [visitor @visitors_model/visitors]
-			 ^{:key visitor} (render_admin_visitor visitor))])
-	)
+	[:ul {:style {:text-align "left" :list-style "none"}}
+	 (for [visitor @visitors_model/visitors]
+		 ^{:key visitor} (render_admin_visitor visitor))])
 
 
 (defn render_admin_container []

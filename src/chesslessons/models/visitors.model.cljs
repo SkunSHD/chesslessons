@@ -1,5 +1,6 @@
 (ns chesslessons.visitors-model
     (:require
+	    [reagent.core :refer [atom]]
         [chesslessons.firebase.db :as db]
 ;		Utils
         [chesslessons.normalize-user.utils :refer [normalize_user]]))

@@ -14,6 +14,7 @@
 ; Atoms
 (defonce admin (atom nil))
 (defonce sign_in_error_msg (atom ""))
+(defonce test42 (atom ""))
 
 
 ; ==================

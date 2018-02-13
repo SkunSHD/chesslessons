@@ -14,12 +14,10 @@
 
 ; ==================
 ; Watchers
-(defn on_change_admin []
-	(visitors_model/get_visitors)
-	)
+(add-watch admin_model/admin "ADMIN-MODEL-CHANGE-ADMIN" #(visitors_model/get_visitors))
 
-(add-watch admin_model/admin "ADMIN-MODEL-CHANGE-ADMIN" on_change_admin)
-
+; ==================
+; Public
 (defn render []
 	[:div
 	 [:button {:onClick #(nav! "/")} "go to home page"]
