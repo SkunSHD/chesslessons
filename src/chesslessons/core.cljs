@@ -13,7 +13,6 @@
 		[chesslessons.components.nav.components :as nav_components]
 ))
 
-;(devtools.core/set-pref! :dont-detect-custom-formatters true)
 (def log (.-log js/console))
 
 

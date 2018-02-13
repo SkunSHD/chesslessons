@@ -63,7 +63,12 @@
 		(facebook_fect_provider_for_email (.-email error) (.-credential error))))
 
 
-(defn google_auth [than]
+(defn google_auth [callback]
 	(.catch (.then
-		(.signInWithPopup (auth) google_auth_provider) than)
+		(.signInWithPopup (auth) google_auth_provider)
+			(fn[new_user]
+				(set!
+					(.-google_link (.-profile (.-additionalUserInfo new_user)))
+					(str "https://plus.google.com/" (aget new_user "additionalUserInfo" "profile" "id")))
+				(callback new_user)))
 			google_auth_error))

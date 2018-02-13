@@ -22,6 +22,7 @@
 	(or
 	 (aget user "displayName")
 	 (if (aget user "user") (aget user "user" "displayName"))
+	 (if (aget user "user") (aget user "user" "displayName"))
 	 (if (aget user "additionalUserInfo") (aget user "additionalUserInfo" "profile" "name"))))
 
 
@@ -37,21 +38,20 @@
 	 (if (aget user "additionalUserInfo") (aget user "additionalUserInfo" "profile" "location" "name"))))
 
 
-(defn- -link [user]
+(defn- -facebook_link [user]
 	(or
 	 (if (aget user "additionalUserInfo") (aget user "additionalUserInfo" "profile" "link"))))
+
+
+(defn- -google_link [user]
+	(or
+	 (if (aget user "additionalUserInfo") (aget user "additionalUserInfo" "profile" "google_link"))))
 
 
 (defn -gender [user]
 	(or
 	 (if (aget user "additionalUserInfo")(aget user "additionalUserInfo" "profile" "gender"))))
 
-(defn js-map [array apply_each]
-  (clj->js
-   (reduce (fn [acc k]
-             (conj acc ({k (apply_each (aget array k))})))
-           []
-           (.keys js/Object array))))
 
 ; ==================
 ; Piblic
@@ -62,7 +62,8 @@
                       :name (-displayName user)
                       :photo (-photo user)
 ;                      :location (-location user)
-                      :link (-link user)
+                      :facebook_link (-facebook_link user)
+                      :google_link (-google_link user)
                       :gender (-gender user)
                       }]
 		normalizeed_user))

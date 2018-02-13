@@ -81,16 +81,37 @@
 	 ])
 
 
+(defn render_admin_visitor_img_src [visitor]
+	(cond
+		(:facebook_link visitor) "http://www.iconarchive.com/download/i49146/yootheme/social-bookmark/social-facebook-box-blue.ico"
+		(:google_link visitor) "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/google_circle_color-64.png"
+		:else nil)
+		)
+
+
+(defn render_admin_visitor_link [visitor]
+	(if (or (:google_link visitor) (:facebook_link visitor))
+		[:a {:href (or (:google_link visitor) (:facebook_link visitor)) :cursor "pointer" :target "_blank"}
+			[:img {:src (render_admin_visitor_img_src visitor) :width 25 :height 25}]]
+		))
+
+
+(defn render_admin_visitor [visitor]
+	[:li {:key (:uid visitor)}
+		 [:img {:src (:photo visitor) :width 50 :height 50}]
+		 [:p "email: " (:email visitor)]
+		 [:p "name: " (:name visitor)]
+		 [render_admin_visitor_link visitor]
+		 [:hr]
+	 ])
+
+
 (defn render_admin_visitors []
+	(log @visitors_model/visitors "42")
 	(if-not (empty? @visitors_model/visitors)
 		[:ul {:style {:text-align "left" :list-style "none"}}
 		 (for [visitor @visitors_model/visitors]
-			 ^{:key visitor} [:li
-			                  [:img {:src (:photo visitor) :width 50 :height 50}]
-			                  [:p "email: " (:email visitor)]
-			                  [:p "name: " (:name visitor)]
-			                  [:hr]
-			                  ])])
+			 ^{:key visitor} (render_admin_visitor visitor))])
 	)
 
 

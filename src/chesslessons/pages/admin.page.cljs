@@ -4,10 +4,21 @@
 		[chesslessons.history :as history :refer [nav!]]
 ;		Models
 		[chesslessons.admin-model :as admin_model]
+		[chesslessons.visitors-model :as visitors_model]
 ;		Components
 		[chesslessons.components.admin.components :as admin_components]
 ))
 
+(def log (.-log js/console))
+
+
+; ==================
+; Watchers
+(defn on_change_admin []
+	(visitors_model/get_visitors)
+	)
+
+(add-watch admin_model/admin "ADMIN-MODEL-CHANGE-ADMIN" on_change_admin)
 
 (defn render []
 	[:div

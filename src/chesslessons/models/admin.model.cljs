@@ -4,8 +4,6 @@
 		[chesslessons.firebase :as fbs]
 ;		Utils
 		[chesslessons.normalize-user.utils :refer [normalize_user]]
-;		Models
-		[chesslessons.visitors-model :as visitors_model]
 ))
 
 
@@ -32,7 +30,6 @@
 
 (defn set_admin [new_admin]
 	(reset! admin new_admin)
-	(visitors_model/get_visitors)
 	)
 
 

@@ -1,8 +1,8 @@
 (ns chesslessons.visitors-model
-  (:require
-    [chesslessons.firebase.db :as db]
+    (:require
+        [chesslessons.firebase.db :as db]
 ;		Utils
-    [chesslessons.normalize-user.utils :refer [normalize_user]]))
+        [chesslessons.normalize-user.utils :refer [normalize_user]]))
 
 
 (def log (.-log js/console))
@@ -25,7 +25,7 @@
 ; ==================
 ; Public
 (defn set_visitors [new_visitors]
-	(log "set_visitors!" new_visitors)
+    (log "set visitors" new_visitors)
     (reset! visitors new_visitors))
 
 
@@ -35,6 +35,7 @@
 
 
 (defn get_visitors []
+    (log "Get -visitors")
   (.catch (.then (db/get_user_all)
                   (fn [visitors] (set_visitors(-format_visitors visitors))))
                   (fn [error] set_visitors_error_msg (.-message error))))
