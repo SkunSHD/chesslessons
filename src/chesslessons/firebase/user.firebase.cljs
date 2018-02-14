@@ -6,7 +6,4 @@
 
 
 (defn upodate_user [fields]
-	(log user)
-	(.catch (.then (.updateProfile user fields)
-	        (fn [user] (log user "SUC")))
-	        (fn [e] (log e "ERR"))))
+	(.updateProfile user fields))

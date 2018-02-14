@@ -12,7 +12,10 @@
 
 (defn render_nav []
 	[:nav.navbar.navbar-primary.bg-primary
-	 [:span {:onClick #(nav! "/")}
-	  [:img {:src "https://pbs.twimg.com/profile_images/471961293981626368/hGiM_c_R_400x400.png" :width 70 :height 70 }]]
-	  (if-not (nil? @admin_model/admin) [:span.navbar-text "welcome, admin!"])
+	 [:span {:onClick #(nav! "/") :style {:cursor "pointer"}}
+	  (if-not (nil? @admin_model/admin)
+		  [:img {:src (:photo @admin_model/admin) :height 70 }]
+		  [:img {:src "https://pbs.twimg.com/profile_images/471961293981626368/hGiM_c_R_400x400.png" :width 70 :height 70 }])
+	  ]
+	  (if-not (nil? @admin_model/admin) [:span.navbar-text "welcome, " (:name @admin_model/admin)])
 	 ])

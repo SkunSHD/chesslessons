@@ -1,5 +1,6 @@
 (ns chesslessons.components.admin.admin-form.components
 	(:require
+		[reagent.core :refer [atom]]
 		[chesslessons.firebase.user.firebase :as fbs_user]
 ;		Models
 		[chesslessons.admin-model :as admin_model]
@@ -7,29 +8,66 @@
 
 (def log (.-log js/console))
 
-; TODO: fix me
+; ==================
+; Atoms
+(defonce admin_info (atom {
+	:displayName ""
+	:photoURL ""
+}))
+
+
+
+; ==================
+; Private
+(defn- -set_admin_info [new_admin_info]
+	(reset! admin_info new_admin_info))
+
+
+(defn- -set_admin_info_field [key new_value]
+	(swap! admin_info assoc key new_value))
+
+
+(defn- -on_admin_form_submit []
+	(.then (fbs_user/upodate_user (clj->js @admin_info)) #(admin_model/set_admin fbs_user/user)))
+
+
+
+; ==================
+; Watchers
+(add-watch admin_model/admin "ADMIN-MODEL-LOGIN-ADMIN" (fn []
+    (-set_admin_info {
+         :displayName (:name @admin_model/admin)
+         :photoURL (:photo @admin_model/admin)})
+))
+
+
+
+; ==================
+; Components
 (defn render_admin_form []
-	(log @admin_model/admin 42)
 	[:div
-	 [:form
+	 [:form {:style {:text-align "left"}}
 	  [:h1.h3.mb-3.font-weight-normal "Edit admin info"]
 	
 	  [:div.form-group
-	   [:label.sr-only "Name"]
+	   [:label "Name"]
 	   [:input.form-control {
 		    :placeholder "Name"
-		    :defaultValue (:name @admin_model/admin)
+		    :onChange (fn [e] (-set_admin_info_field :displayName (.-value (.-target e))))
+		    :value (:displayName @admin_info)
 		    :type "text"}]
 	   ]
 	
 	  [:div.form-group
-	   [:label.sr-only "Email"]
+	   [:label "Photo"]
+	   [:img {:src (:photoURL @admin_info) :height 70 :style {:padding "5px 10px 5px 10px"}}]
 	   [:input.form-control {
-		    :placeholder "Email"
-		    :defaultValue (:email @admin_model/admin)
-		    :type "email"}]
+	        :placeholder "Photo"
+	        :onChange (fn [e] (-set_admin_info_field :photoURL (.-value (.-target e))))
+	        :value (:photoURL @admin_info)
+	        :type "text"}]
 	   ]
 	  ]
 	 
 	 [:div.form-group
-	  [:button.btn.btn-primary { :on-click #(fbs_user/upodate_user (js-obj "displayName" "xxxx" "photoURL" "https://pbs.twimg.com/profile_images/471961293981626368/hGiM_c_R_400x400.png" ))} "Save"]]])
+	  [:button.btn.btn-primary { :on-click -on_admin_form_submit} "Save"]]])
