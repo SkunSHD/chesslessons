@@ -2,7 +2,7 @@
     (:require
         [chesslessons.firebase.db :as db]
 ;		Utils
-        [chesslessons.atom.utils  :refer [atom!]]
+        [chesslessons.atom.utils  :refer [atom! action!]]
         [chesslessons.normalize-user.utils :refer [normalize_user]]))
 
 
@@ -24,16 +24,19 @@
 
 
 ; ==================
-; Public
+; Actions
 (defn set_visitors [new_visitors]
+	(action! "[visitors.model/set_visitors]" new_visitors)
     (reset! visitors new_visitors))
 
 
 (defn set_visitors_error_msg [errors]
-  (reset! visitors_error_msg errors))
+	(action! "[visitors.model/set_visitors_error_msg]" errors)
+    (reset! visitors_error_msg errors))
 
 
 (defn get_visitors []
-  (.catch (.then (db/get_user_all)
-                  (fn [visitors] (set_visitors(-format_visitors visitors))))
-                  (fn [error] set_visitors_error_msg (.-message error))))
+	(action! "[visitors.model/get_visitors]")
+    (.catch (.then (db/get_user_all)
+		(fn [visitors] (set_visitors(-format_visitors visitors))))
+		(fn [error] set_visitors_error_msg (.-message error))))

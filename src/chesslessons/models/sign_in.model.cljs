@@ -2,7 +2,7 @@
 	(:require
 		[chesslessons.firebase :as fbs]
 ;		Utils
-		[chesslessons.atom.utils  :refer [atom!]]
+		[chesslessons.atom.utils  :refer [atom! action!]]
 		))
 
 
@@ -12,8 +12,9 @@
 
 
 ; ==================
-; Public
+; Actions
 (defn toggle [e]
+	(action! "[sign_in.model/toggle]")
 	(.preventDefault e)
 	(reset! is_button_visible (not @is_button_visible))
 	)

@@ -3,7 +3,7 @@
 		[chesslessons.firebase.db :as db]
 ;		Utils
 		[chesslessons.normalize-user.utils :refer [normalize_user]]
-		[chesslessons.atom.utils  :refer [atom!]]
+		[chesslessons.atom.utils  :refer [atom! action!]]
 ))
 
 (def log (.-log js/console))
@@ -15,8 +15,8 @@
 
 
 ; ==================
-; Public
+; Actions
 (defn set_user [new_user]
-	(log new_user "NEW!")
+	(action! "[user.model/user]" new_user)
 	(reset! user (normalize_user new_user))
 	(db/save_user  (normalize_user new_user)))
