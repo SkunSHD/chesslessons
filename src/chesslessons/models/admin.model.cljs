@@ -25,18 +25,18 @@
 
 (defn set_admin [new_admin]
 	(action! "[admin.model/set_admin]" new_admin)
-	(reset! admin (normalize_user new_admin)))
+	(reset! admin new_admin))
 
 
 (defn sign_in_admin [email password]
 	(action! "[admin.model/sign_in_admin]" email password)
 	(.catch (.then
 	(fbs/sign_in_with_email_and_password email password)
-			(fn [new_admin] (set_admin new_admin)))
+			(fn [new_admin] (set_admin (normalize_user new_admin))))
 	        (fn [error] (set_sign_in_error_msg (.-message error)))
 	        ))
 
 
 (defn log_out_admin []
 	(action! "[admin.model/log_out_admin]")
-	(reset! admin nil))
+	(set_admin nil))
