@@ -36,3 +36,7 @@
 	        (fn [error] (set_sign_in_error_msg (.-message error)))
 	        ))
 
+
+(defn log_out_admin []
+	(action! "[admin.model/log_out_admin]")
+	(reset! admin nil))

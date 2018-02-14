@@ -49,12 +49,10 @@
 ; ==================
 ; Routes
 (defroute home-page "/" []
-	(reset! current_page {:name "home_page" :params {}})
-	(js/console.log "Homepage!"))
+	(reset! current_page {:name "home_page" :params {}}))
 
 (defroute admin-page "/admin" []
-	(reset! current_page {:name "admin_page" :params {}})
-	(js/console.log "admin page!"))
+	(reset! current_page {:name "admin_page" :params {}}))
 
 (defroute default-route "*" []
 	(js/console.log (str "unknown route: " (get-token))))

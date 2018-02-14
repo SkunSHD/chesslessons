@@ -22,7 +22,6 @@
 
 
 
-
 ; ==================
 ; Private
 (defn- -email_on_change [e]
@@ -31,7 +30,7 @@
 
 
 (defn- -password_on_change [e]
-	(if @admin_model/sign_in_error_msg (admin_model/set_sign_in_error_msg ""))
+	(if-not (empty?@admin_model/sign_in_error_msg) (admin_model/set_sign_in_error_msg ""))
 	(reset! password (.-value (.-target e))))
 
 
@@ -111,4 +110,6 @@
 	 [:div
 	   	[:h1 "admin container"]
 	    [admin_form_components/render_admin_form]
-	    [render_admin_visitors]])
+	    [:button { :on-click #(admin_model/log_out_admin)} "Log out"]
+	    [render_admin_visitors]
+	  ])
