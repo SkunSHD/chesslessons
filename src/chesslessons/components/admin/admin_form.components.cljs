@@ -1,7 +1,7 @@
 (ns chesslessons.components.admin.admin-form.components
 	(:require
 		[reagent.core :refer [atom]]
-		[chesslessons.firebase.user.firebase :as fbs_user]
+		[chesslessons.firebase.user :as fbs_user]
 ;		Models
 		[chesslessons.admin-model :as admin_model]
 ))

@@ -1,13 +1,14 @@
 (ns chesslessons.sign_in-model
 	(:require
-		[reagent.core :refer [atom cursor]]
 		[chesslessons.firebase :as fbs]
+;		Utils
+		[chesslessons.atom.utils  :refer [atom!]]
 		))
 
 
 ; ==================
 ; Atoms
-(defonce is_button_visible (atom false))
+(defonce is_button_visible (atom! "[sign_in.model/is_button_visible]" false))
 
 
 ; ==================

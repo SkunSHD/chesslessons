@@ -31,7 +31,6 @@
 	(.get (:users collections)))
 
 (defn save_user [new_user]
-	(log new_user 4242)
 	(.then (get_user_by_email(:email new_user)) (fn [users]
 		(if (-user_exists? users)
 		  (log "User already exists: " (:email new_user))

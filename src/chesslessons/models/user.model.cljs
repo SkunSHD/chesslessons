@@ -1,9 +1,9 @@
 (ns chesslessons.user-model
 	(:require
-		[reagent.core :refer [atom cursor]]
 		[chesslessons.firebase.db :as db]
 ;		Utils
 		[chesslessons.normalize-user.utils :refer [normalize_user]]
+		[chesslessons.atom.utils  :refer [atom!]]
 ))
 
 (def log (.-log js/console))
@@ -11,8 +11,7 @@
 
 ; ==================
 ; Atoms
-(defonce user (atom nil))
-
+(defonce user (atom! "[user.model/user]" nil))
 
 
 ; ==================

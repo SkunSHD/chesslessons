@@ -1,8 +1,8 @@
 (ns chesslessons.visitors-model
     (:require
-	    [reagent.core :refer [atom]]
         [chesslessons.firebase.db :as db]
 ;		Utils
+        [chesslessons.atom.utils  :refer [atom!]]
         [chesslessons.normalize-user.utils :refer [normalize_user]]))
 
 
@@ -11,8 +11,8 @@
 
 ; ==================
 ; Atoms
-(defonce visitors (atom {}))
-(defonce visitors_error_msg (atom ""))
+(defonce visitors (atom! "[visitors.model/visitors]" {}))
+(defonce visitors_error_msg (atom! "[visitors.model/visitors_error_msg]" ""))
 
 
 
@@ -34,7 +34,6 @@
 
 
 (defn get_visitors []
-    (log "Get -visitors")
   (.catch (.then (db/get_user_all)
                   (fn [visitors] (set_visitors(-format_visitors visitors))))
                   (fn [error] set_visitors_error_msg (.-message error))))

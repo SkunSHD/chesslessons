@@ -1,8 +1,8 @@
 (ns chesslessons.admin-model
 	(:require
-		[reagent.core :refer [atom cursor]]
 		[chesslessons.firebase :as fbs]
 ;		Utils
+		[chesslessons.atom.utils  :refer [atom!]]
 		[chesslessons.normalize-user.utils :refer [normalize_user]]
 ))
 
@@ -12,16 +12,8 @@
 
 ; ==================
 ; Atoms
-(defonce admin (atom nil))
-(defonce sign_in_error_msg (atom ""))
-(defonce test42 (atom ""))
-
-
-; ==================
-; Cursors
-(def admin_uid (cursor admin [:uid]))
-(def admin_email (cursor admin [:email]))
-
+(defonce admin (atom! "[admin.model/admin]" nil))
+(defonce sign_in_error_msg (atom! "[admin.model/sign_in_error_msg]" ""))
 
 
 ; ==================

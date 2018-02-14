@@ -1,4 +1,4 @@
-(ns chesslessons.firebase.user.firebase)
+(ns chesslessons.firebase.user)
 
 (def log (.-log js/console))
 
