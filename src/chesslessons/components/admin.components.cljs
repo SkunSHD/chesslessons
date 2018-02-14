@@ -4,9 +4,11 @@
 		[reagent.core :refer [atom cursor]]
 ;		Models
 		[chesslessons.admin-model :as admin_model]
-    [chesslessons.visitors-model :as visitors_model]
+        [chesslessons.visitors-model :as visitors_model]
 ;       Utils
 		[chesslessons.firebase.db :as db]
+;		Components
+		[chesslessons.components.admin.admin-form.components :as admin_form_components]
 ))
 
 
@@ -108,4 +110,5 @@
 (defn render_admin_container []
 	 [:div
 	   	[:h1 "admin container"]
+	    [admin_form_components/render_admin_form]
 	    [render_admin_visitors]])

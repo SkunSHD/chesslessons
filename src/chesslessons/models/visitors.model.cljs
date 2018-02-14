@@ -26,12 +26,10 @@
 ; ==================
 ; Public
 (defn set_visitors [new_visitors]
-    (log "set visitors" new_visitors)
     (reset! visitors new_visitors))
 
 
 (defn set_visitors_error_msg [errors]
-  (log "set_visitors error" errors)
   (reset! visitors_error_msg errors))
 
 
