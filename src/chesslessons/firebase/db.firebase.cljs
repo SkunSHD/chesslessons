@@ -14,11 +14,10 @@
 
 ; ==============
 ; Private
-(defn- -user_exists? [users]
+(defn- -users_exists? [users]
 	(not (empty?(filter
 	             (fn [user] (aget user "exists"))
 	             (js->clj (aget users "docs"))))))
-
 
 
 (defn get_user_by_uid [uid]
@@ -32,8 +31,14 @@
 
 (defn save_user [new_user]
 	(.then (get_user_by_email(:email new_user)) (fn [users]
-		(if (-user_exists? users)
+		(if (-users_exists? users)
 		  (log "User already exists: " (:email new_user))
-		  (.add (:users collections) (clj->js new_user)) )
+			(.set (.doc (:users collections) (:uid new_user)) (clj->js new_user)) )
 		))
+	)
+
+(defn delete_user [uid]
+	(.then (.delete (.doc (:users collections) uid))
+		#(log "delete user success, uid:" uid)
+		#(log "delete user error" %))
 	)

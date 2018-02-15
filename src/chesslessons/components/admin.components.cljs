@@ -45,6 +45,10 @@
 		(-on_submit_success e)
 		))
 
+(defn- -delete_visitor [uid]
+	(log "delete" uid)
+	(db/delete_user uid))
+
 
 
 ; ==================
@@ -91,11 +95,13 @@
 
 
 (defn render_admin_visitor [visitor]
-	[:li {:key (:uid visitor)}
+	[:li {:key (:uid visitor) :style {:position "relative"}}
 		 [:img {:src (:photo visitor) :width 50 :height 50}]
 		 [:p "email: " (:email visitor)]
 		 [:p "name: " (:name visitor)]
 		 [render_admin_visitor_link visitor]
+	 	 [:a {:style {:border "solid" :position "absolute" :right 0 :top 0 :size 14 :cursor "pointer" :color "red"}
+			  :on-click #(-delete_visitor (:uid visitor)) } "X"]
 		 [:hr]
 	 ])
 
