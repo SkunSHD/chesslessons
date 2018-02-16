@@ -7,6 +7,7 @@
         [chesslessons.visitors-model :as visitors_model]
 ;       Utils
 		[chesslessons.firebase.db :as db]
+		[goog.string :as gstring]
 ;		Components
 		[chesslessons.components.admin.admin-form.components :as admin_form_components]
 ))
@@ -100,8 +101,10 @@
 		 [:p "email: " (:email visitor)]
 		 [:p "name: " (:name visitor)]
 		 [render_admin_visitor_link visitor]
-	 	 [:a {:style {:border "solid" :position "absolute" :right 0 :top 0 :size 14 :cursor "pointer" :color "red"}
-			  :on-click #(-delete_visitor (:uid visitor)) } "X"]
+		 [:button.close {:type "button" :aria-label "Close"
+						:style {:position "absolute" :right 0 :top 0}
+						:on-click #(-delete_visitor (:uid visitor))}
+		 	[:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
 		 [:hr]
 	 ])
 

@@ -44,7 +44,6 @@
 
 (defn add_listener_visitors_change []
 	(action! "[visitors.model/add_visitors_change_listener]")
-;	(log  "111 WTF ! " (.onSnapshot (:users db/collections) #(log "changes success=))")))
 	(db/add_listener_on_users_collection
 	  (fn [visitors]
 		  (action! "[visitors.model] has been changed!")
