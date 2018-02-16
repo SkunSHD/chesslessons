@@ -15,8 +15,12 @@
 ; ==================
 ; Watchers
 (defn- -on_change_admin [key atom old new]
-	(if-not old (visitors_model/get_visitors)))
+	(if-not old (visitors_model/get_visitors))
+	(visitors_model/add_listener_visitors_change)
+	)
+
 (add-watch admin_model/admin "[admin.page] ADMIN-MODEL-CHANGE-ADMIN" -on_change_admin)
+
 
 ; ==================
 ; Public

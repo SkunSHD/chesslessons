@@ -12,6 +12,7 @@
 	 :users (.collection firestore "users")
 })
 
+
 ; ==============
 ; Private
 (defn- -users_exists? [users]
@@ -42,3 +43,6 @@
 		#(log "delete user success, uid:" uid)
 		#(log "delete user error" %))
 	)
+
+(defn add_listener_on_users_collection [callback]
+	(.onSnapshot (:users collections) callback))

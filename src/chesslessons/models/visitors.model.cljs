@@ -40,3 +40,13 @@
     (.catch (.then (db/get_user_all)
 		(fn [visitors] (set_visitors(-format_visitors visitors))))
 		(fn [error] set_visitors_error_msg (.-message error))))
+
+
+(defn add_listener_visitors_change []
+	(action! "[visitors.model/add_visitors_change_listener]")
+;	(log  "111 WTF ! " (.onSnapshot (:users db/collections) #(log "changes success=))")))
+	(db/add_listener_on_users_collection
+	  (fn [visitors]
+		  (action! "[visitors.model] has been changed!")
+		  (set_visitors(-format_visitors visitors))))
+	)
