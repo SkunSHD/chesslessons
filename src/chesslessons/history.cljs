@@ -8,6 +8,8 @@
 	(:import
 		[goog.history Html5History EventType]))
 
+(def log (.-log js/console))
+
 
 ; ==================
 ; Atoms
@@ -54,6 +56,9 @@
 (defroute admin-page "/admin" []
 	(reset! current_page {:name "admin_page" :params {}}))
 
+(defroute admin-page "/admin/edit" []
+	(reset! current_page {:name "admin_edit_page" :params {}}))
+
 (defroute default-route "*" []
 	(js/console.log (str "unknown route: " (get-token))))
 
@@ -63,3 +68,6 @@
 ; And we will want a function to programmatically change the URL (and add to the history).
 (defn nav! [path]
 	(.setToken history path))
+
+(defn ?current_page [page_name]
+    (= (:name @current_page) page_name))

@@ -26,7 +26,6 @@
 ; Public
 (defn render []
 	[:div
-	 [:button {:onClick #(nav! "/")} "go to home page"]
 	    (if (nil? @admin_model/admin)
 		  [admin_components/render_login_form]
 		  [admin_components/render_admin_container])

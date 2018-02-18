@@ -12,7 +12,7 @@
 
 (defn render []
 	[:div
-	 [:button {:onClick #(nav! "/admin")} "go to admin page"]
+
 	
 	 (if (nil? @user_model/user)
 		 [sign_in_components/render]

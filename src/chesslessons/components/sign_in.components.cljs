@@ -12,17 +12,8 @@
 
 (defn render []
 	[:form
-	 [:h1.h3.mb-3.font-weight-normal "Please sign in"]
-
-	 [:div.form-group
-	  [:label.sr-only "Email address"]
-	  [:input.form-control {:placeholder "Email address" :required true :type "email"}]
-	  ]
-
-	 [:div.form-group
-	  [:label.sr-only "Password"]
-	  [:input.form-control {:placeholder "Password" :required true :type "password"}]
-	  ]
+	 [:p.h1 "Chess Lessons"]
+	 [:p.h3 "Looking for private in-home or in-studio Chess lessons? Coach is ready to get you started. Let's start today!"]
 
 	 [:button.btn.btn-primary {:on-click sign_in-model/toggle} "Get in touch with me"]
 

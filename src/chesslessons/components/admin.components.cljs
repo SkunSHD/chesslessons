@@ -8,8 +8,6 @@
 ;       Utils
 		[chesslessons.firebase.db :as db]
 		[goog.string :as gstring]
-;		Components
-		[chesslessons.components.admin.admin-form.components :as admin_form_components]
 ))
 
 
@@ -118,7 +116,5 @@
 (defn render_admin_container []
 	 [:div
 	   	[:h1 "admin container"]
-	    [admin_form_components/render_admin_form]
-	    [:button { :on-click #(admin_model/log_out_admin)} "Log out"]
 	    [render_admin_visitors]
 	  ])
