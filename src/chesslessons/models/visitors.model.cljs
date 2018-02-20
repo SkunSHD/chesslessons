@@ -46,6 +46,5 @@
 	(action! "[visitors.model/add_visitors_change_listener]")
 	(db/add_listener_on_users_collection
 	  (fn [visitors]
-		  (action! "[visitors.model] has been changed!")
 		  (set_visitors(-format_visitors visitors))))
 	)
