@@ -42,9 +42,15 @@
 		(fn [error] set_visitors_error_msg (.-message error))))
 
 
+(defn on_listener_visitors_change [visitors]
+	(action! "[visitors.model/on_listener_visitors_change]")
+	(set_visitors(-format_visitors visitors)))
+
+
 (defn add_listener_visitors_change []
 	(action! "[visitors.model/add_visitors_change_listener]")
-	(db/add_listener_on_users_collection
-	  (fn [visitors]
-		  (set_visitors(-format_visitors visitors))))
+	(db/add_listener_on_users_collection on_listener_visitors_change)
 	)
+
+
+(add_listener_visitors_change)

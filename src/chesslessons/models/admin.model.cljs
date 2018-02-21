@@ -4,7 +4,9 @@
 ;		Utils
 		[chesslessons.atom.utils  :refer [atom! action!]]
 		[chesslessons.normalize-user.utils :refer [normalize_user]]
-))
+; 		Models
+		[chesslessons.visitors-model :as visitors_model]
+		))
 
 
 (def log (.-log js/console))
@@ -43,3 +45,21 @@
 (defn log_out_admin []
 	(action! "[admin.model/log_out_admin]")
 	(set_admin nil))
+
+
+; ==================
+; Watchers
+(defn- -on_change_admin [key atom old new]
+	(if-not old (visitors_model/get_visitors)))
+(add-watch admin "[admin.model] ADMIN-MODEL-CHANGE-ADMIN" -on_change_admin)
+
+
+; ==================
+; Auth
+(defn auth_state_change_handler [user]
+	(log "auth_state_change_handler" user)
+	(set_admin (js->clj user)))
+
+(.onAuthStateChanged (fbs/auth) auth_state_change_handler)
+
+
