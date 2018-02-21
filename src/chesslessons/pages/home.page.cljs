@@ -12,8 +12,6 @@
 
 (defn render []
 	[:div
-
-	
 	 (if (nil? @user_model/user)
 		 [sign_in_components/render]
 		 [profile_components/render])
