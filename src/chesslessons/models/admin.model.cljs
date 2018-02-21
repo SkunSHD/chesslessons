@@ -58,7 +58,7 @@
 ; Auth
 (defn auth_state_change_handler [user]
 	(log "auth_state_change_handler" user)
-	(set_admin (js->clj user)))
+	(set_admin user))
 
 (.onAuthStateChanged (fbs/auth) auth_state_change_handler)
 
