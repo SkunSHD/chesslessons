@@ -11,8 +11,8 @@
 ; ==================
 ; Atoms
 (defonce admin_info (atom {
-	:displayName ""
-	:photoURL ""
+	:displayName (or (:name @admin_model/admin)"")
+	:photoURL (or (:photo @admin_model/admin)"")
 }))
 
 
@@ -31,20 +31,10 @@
 	(.then (fbs_user/upodate_user (clj->js @admin_info)) #(admin_model/set_admin fbs_user/user)))
 
 
-
-; ==================
-; Watchers
-(add-watch admin_model/admin "ADMIN-MODEL-LOGIN-ADMIN" (fn []
-    (-set_admin_info {
-         :displayName (:name @admin_model/admin)
-         :photoURL (:photo @admin_model/admin)})
-))
-
-
-
 ; ==================
 ; Components
 (defn render_admin_form []
+	(log @admin_info)
 	[:div
 	 [:form {:style {:text-align "left"}}
 	  [:h1.h3.mb-3.font-weight-normal "Edit admin info"]
