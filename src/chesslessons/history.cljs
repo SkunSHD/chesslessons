@@ -32,12 +32,30 @@
 	      (.setUseFragment false)))
 
 
+
+; ==================
+; Routes
+(defroute home-page "/" []
+	(reset! current_page {:name "home_page" :params {}}))
+
+(defroute admin-page "/admin" []
+	(reset! current_page {:name "admin_page" :params {}}))
+
+(defroute admin-page-edit "/admin/edit" []
+	(reset! current_page {:name "admin_edit_page" :params {}}))
+
+(defroute default-route "*" []
+	(js/console.log (str "unknown route: " (get-token))))
+
+
+
 ; ==================
 ; Now a handler for what to do when the URL changes.
 (defn handle-url-change [e]
 	(js/console.groupEnd)
 	(js/console.group (str "nav!: " (get-token)))
 	(secretary/dispatch! (get-token)))
+
 
 
 ; ==================
@@ -48,19 +66,7 @@
                                            #(handle-url-change %))
                        (.setEnabled true)))
 
-; ==================
-; Routes
-(defroute home-page "/" []
-	(reset! current_page {:name "home_page" :params {}}))
 
-(defroute admin-page "/admin" []
-	(reset! current_page {:name "admin_page" :params {}}))
-
-(defroute admin-page "/admin/edit" []
-	(reset! current_page {:name "admin_edit_page" :params {}}))
-
-(defroute default-route "*" []
-	(js/console.log (str "unknown route: " (get-token))))
 
 
 ; ==================
