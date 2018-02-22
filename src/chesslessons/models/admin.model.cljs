@@ -1,9 +1,10 @@
 (ns chesslessons.admin-model
 	(:require
 		[chesslessons.firebase :as fbs]
-;		Utils
+		[chesslessons.firebase.db :as db]
+		;		Utils
 		[chesslessons.atom.utils  :refer [atom! action!]]
-		[chesslessons.normalize-user.utils :refer [normalize_user]]
+		[chesslessons.normalize-user.utils :refer [normalize_user format_visitors]]
 ; 		Models
 		[chesslessons.visitors-model :as visitors_model]
 		))
@@ -53,10 +54,27 @@
 
 
 ; ==================
+; Privat
+(defn- -on_listener_visitors_change [visitors]
+	(if-not (aget visitors "empty")
+		(do
+			(action! "[visitors.model/on_listener_visitors_change]" (format_visitors visitors))
+			(visitors_model/set_visitors (format_visitors visitors))))
+	)
+
+(defn- -add_listener_visitors_change []
+	(action! "[visitors.model/add_visitors_change_listener]")
+	(db/add_listener_on_visitors_collection -on_listener_visitors_change))
+
+
+
+
+; ==================
 ; Watchers
 (defn- -on_change_admin [key atom old new]
 	(if (and (nil? old) (not= old new))
-		(visitors_model/get_visitors)))
+		(-add_listener_visitors_change)))
+
 (add-watch admin "[admin.model] ADMIN-MODEL-CHANGE-ADMIN" -on_change_admin)
 
 

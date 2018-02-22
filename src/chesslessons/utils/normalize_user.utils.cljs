@@ -67,3 +67,8 @@
                       :gender (-gender user)
                       }]
 		normalizeed_user))
+
+
+(defn format_visitors [visitors]
+	(map (fn [visitor] (js->clj (.data visitor) :keywordize-keys true))
+		 (aget visitors "docs")))

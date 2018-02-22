@@ -3,7 +3,7 @@
 		[chesslessons.firebase.db :as db]
 		;		Utils
 		[chesslessons.atom.utils :refer [atom! action!]]
-		[chesslessons.normalize-user.utils :refer [normalize_user]]))
+		[chesslessons.normalize-user.utils :refer [normalize_user format_visitors]]))
 
 
 (def log (.-log js/console))
@@ -35,23 +35,8 @@
 
 
 (defn get_visitors []
-	(log 4242352)
 	(action! "[visitors.model/get_visitors]")
 	(.catch
 		(.then (db/get_all_visitors)
-		       (fn [visitors] (set_visitors (-format_visitors visitors))))
+		       (fn [visitors] (set_visitors (format_visitors visitors))))
 		(fn [error] set_visitors_error_msg (.-message error))))
-
-
-(defn on_listener_visitors_change [visitors]
-	(action! "[visitors.model/on_listener_visitors_change]" (-format_visitors visitors))
-	(set_visitors (-format_visitors visitors))
-	)
-
-
-(defn add_listener_visitors_change []
-	(action! "[visitors.model/add_visitors_change_listener]")
-	(db/add_listener_on_visitors_collection on_listener_visitors_change))
-
-
-(add_listener_visitors_change)
