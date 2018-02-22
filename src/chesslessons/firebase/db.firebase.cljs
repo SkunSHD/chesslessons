@@ -9,40 +9,38 @@
 (def firestore (.firestore js/firebase))
 
 (def collections {
-	 :users (.collection firestore "users")
+	 :visitors (.collection firestore "visitors")
 })
 
 
 ; ==============
 ; Private
-(defn- -users_exists? [users]
+(defn- -visitors_exists? [visitors]
 	(not (empty?(filter
-	             (fn [user] (aget user "exists"))
-	             (js->clj (aget users "docs"))))))
+	             (fn [visitor] (aget visitor "exists"))
+	             (js->clj (aget visitors "docs"))))))
 
 
-(defn get_user_by_uid [uid]
-	(.get (.doc (:users collections) uid)))
+(defn get_visitor_by_email [email]
+	(.get (.where (:visitors collections) "email" "==" email)))
 
-(defn get_user_by_email [email]
-	(.get (.where (:users collections) "email" "==" email)))
+(defn get_all_visitors []
+	(.get (:visitors collections)))
 
-(defn get_user_all []
-	(.get (:users collections)))
-
-(defn save_user [new_user]
-	(.then (get_user_by_email(:email new_user)) (fn [users]
-		(if (-users_exists? users)
-		  (log "User already exists: " (:email new_user))
-			(.set (.doc (:users collections) (:uid new_user)) (clj->js new_user)) )
+(defn save_visitor [new_visitor]
+	(.then (get_visitor_by_email (:email new_visitor)) (fn [visitors]
+		(if (-visitors_exists? visitors)
+		  (log "Visitor already exists: " (:email new_visitor))
+			(.set (.doc (:visitors collections) (:uid new_visitor)) (clj->js new_visitor)) )
 		))
 	)
 
-(defn delete_user [uid]
-	(.then (.delete (.doc (:users collections) uid))
-		#(log "delete user success, uid:" uid)
-		#(log "delete user error" %))
+(defn delete_visitor [uid]
+	(.then (.delete (.doc (:visitors collections) uid))
+		#(log "delete visitor success, uid:" uid)
+		#(log "delete visitor error" %))
 	)
 
-(defn add_listener_on_users_collection [callback]
-	(.onSnapshot (:users collections) callback))
+; TODO: move this to admin model?
+(defn add_listener_on_visitors_collection [callback]
+	(.onSnapshot (:visitors collections) callback))

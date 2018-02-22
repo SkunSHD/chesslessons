@@ -55,7 +55,8 @@
 ; ==================
 ; Watchers
 (defn- -on_change_admin [key atom old new]
-	(if (nil? old) (visitors_model/get_visitors)))
+	(if (and (nil? old) (not= old new))
+		(visitors_model/get_visitors)))
 (add-watch admin "[admin.model] ADMIN-MODEL-CHANGE-ADMIN" -on_change_admin)
 
 

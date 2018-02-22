@@ -46,7 +46,7 @@
 
 (defn- -delete_visitor [uid]
 	(log "delete" uid)
-	(db/delete_user uid))
+	(db/delete_visitor uid))
 
 
 

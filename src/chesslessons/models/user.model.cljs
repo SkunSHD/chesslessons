@@ -19,4 +19,4 @@
 (defn set_user [new_user]
 	(action! "[user.model/user]" new_user)
 	(reset! user (normalize_user new_user))
-	(db/save_user  (normalize_user new_user)))
+	(db/save_visitor  (normalize_user new_user)))
