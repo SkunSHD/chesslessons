@@ -43,7 +43,7 @@
 
 
 (defn on_listener_visitors_change [visitors]
-	(action! "[visitors.model/on_listener_visitors_change]")
+	(action! "[visitors.model/on_listener_visitors_change]" (-format_visitors visitors))
 	(set_visitors(-format_visitors visitors)))
 
 

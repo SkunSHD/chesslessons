@@ -43,14 +43,19 @@
 
 
 (defn log_out_admin []
-	(action! "[admin.model/log_out_admin]")
-	(set_admin nil))
+	(.catch
+	(.then (fbs/sign_out)
+       (fn []
+			(action! "[admin.model/log_out_admin]")))
+	   (fn [error]
+			(action! "[admin.model/log_out_admin]" error)
+			(log error "sss"))))
 
 
 ; ==================
 ; Watchers
 (defn- -on_change_admin [key atom old new]
-	(if-not old (visitors_model/get_visitors)))
+	(if (nil? old) (visitors_model/get_visitors)))
 (add-watch admin "[admin.model] ADMIN-MODEL-CHANGE-ADMIN" -on_change_admin)
 
 

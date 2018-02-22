@@ -16,12 +16,8 @@
 	(.signInWithEmailAndPassword (auth) email password))
 
 
-;(.onAuthStateChanged (auth) (fn [user]
-;	                          (log "onAuthStateChanged" (if (empty? user) "logout" "login"))))
-
-
-; curl -i -X GET \
-; "https://graph.facebook.com/v2.12/547197455678714?access_token=EAAOOrohbrZA0BAM8innmLyN56WbvCo9rnZBcu5nHVsKFBHwnMIsqiDhO70rjVgykEnWcu0UUbtYPZACCHgF1tZBujZBBdyDAeXc6nbtyVZArVlvjVLHZB6MrSCJ8pPE2HmO0PS6gZCLiUdrZA2NEius5IGaBa0ldlQy70jnjtN5hSSQZDZD"
+(defn sign_out []
+	(.signOut (auth)))
 
 ; ==================
 ; Facebook
