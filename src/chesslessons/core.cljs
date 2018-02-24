@@ -7,7 +7,7 @@
 ;		Layout
 		[chesslessons.layout :as layout]
 ;       Models
-		[chesslessons.user-model :as user_model]
+		[chesslessons.visitor-model :as user_model]
 		[chesslessons.admin-model :as admin_model]
 ;		Components
 		[chesslessons.components.nav.components :as nav_components]

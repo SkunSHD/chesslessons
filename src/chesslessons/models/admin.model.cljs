@@ -84,7 +84,6 @@
 ; ==================
 ; Auth
 (defn auth_state_change_handler [user]
-    (log "not yet" user)
 	(if (-?admin user) (set_admin user)))
 
 (.onAuthStateChanged (fbs/auth) auth_state_change_handler)

@@ -3,7 +3,7 @@
 		[chesslessons.firebase :as fbs]
 ;       Models
 		[chesslessons.sign_in-model :as sign_in-model]
-		[chesslessons.user-model :as user_model]
+		[chesslessons.visitor-model :as user_model]
 ))
 
 

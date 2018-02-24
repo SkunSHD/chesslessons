@@ -1,4 +1,4 @@
-(ns chesslessons.user-model
+(ns chesslessons.visitor-model
 	(:require
 		[chesslessons.firebase.db :as db]
 ;		Utils
@@ -11,12 +11,12 @@
 
 ; ==================
 ; Atoms
-(defonce user (atom! "[user.model/user]" nil))
+(defonce visitor (atom! "[visitor.model/user]" nil))
 
 
 ; ==================
 ; Actions
-(defn set_user [new_user]
-	(action! "[user.model/user]" new_user)
-	(reset! user (normalize_user new_user))
-	(db/save_visitor  (normalize_user new_user)))
+(defn set_user [new_visitor]
+	(action! "[visitor.model/user]" new_visitor)
+	(reset! user (normalize_user new_visitor))
+	(db/save_visitor  (normalize_user new_visitor)))
