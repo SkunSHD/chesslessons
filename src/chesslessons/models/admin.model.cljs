@@ -66,6 +66,9 @@
 	(action! "[visitors.model/add_visitors_change_listener]")
 	(db/add_listener_on_visitors_collection -on_listener_visitors_change))
 
+(defn- -?admin [user]
+	(= (:imail user) "admin@i.ua"))
+
 
 
 
@@ -81,7 +84,8 @@
 ; ==================
 ; Auth
 (defn auth_state_change_handler [user]
-	(set_admin user))
+    (log "not yet" user)
+	(if (-?admin user) (set_admin user)))
 
 (.onAuthStateChanged (fbs/auth) auth_state_change_handler)
 
