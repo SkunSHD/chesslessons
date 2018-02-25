@@ -1,8 +1,10 @@
 (ns chesslessons.visitor-model
 	(:require
 		[chesslessons.firebase.db :as db]
-;		Utils
-		[chesslessons.normalize-user.utils :refer [normalize_user]]
+        [chesslessons.firebase :refer [sign_out]]
+
+        ;		Utils
+        [chesslessons.normalize-visitor.utils :refer [normalize_visitor]]
 		[chesslessons.atom.utils  :refer [atom! action!]]
 ))
 
@@ -11,12 +13,17 @@
 
 ; ==================
 ; Atoms
-(defonce visitor (atom! "[visitor.model/user]" nil))
+(defonce visitor (atom! "[visitor.model/visitor]" nil))
 
 
 ; ==================
 ; Actions
-(defn set_user [new_visitor]
-	(action! "[visitor.model/user]" new_visitor)
-	(reset! user (normalize_user new_visitor))
-	(db/save_visitor  (normalize_user new_visitor)))
+(defn set_visitor [new_visitor]
+    (action! "[visitor.model/set_visitor]" new_visitor)
+	(reset! visitor (normalize_visitor new_visitor))
+    (db/save_visitor  (normalize_visitor new_visitor)))
+
+
+(defn logout []
+	(action! "[visitor.model/logout] of" (:name @visitor) @visitor)
+    (sign_out))

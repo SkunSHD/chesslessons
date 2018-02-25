@@ -1,7 +1,7 @@
 (ns chesslessons.components.profile.components
 	(:require
 ;       Models
-		[chesslessons.visitor-model :as user_model]
+		[chesslessons.visitor-model :refer [visitor, logout]]
 		))
 
 (def log (.-log js/console))
@@ -12,10 +12,10 @@
 (defn render []
 	[:div
 	  [:div
-	   [:a {:href (:link @user_model/visitor)}
-	    [:img { :width 150 :height 150 :src (:photo @user_model/visitor)}]
-	    [:h3 "User name:" (:name @user_model/visitor)]
+	   [:a {:href (:link @visitor)}
+            [:img { :width 150 :height 150 :src (:photo @visitor)}]
+            [:h3 "User name:" (:name @visitor)]
 	    ]]
-	   [:h6 "Email: " (:email@user_model/visitor)]
-	   [:h6 "Gender: " (:gender @user_model/visitor)]
+        [:h6 "Email: " (:email@visitor)]
+        [:h6 "Gender: " (:gender @visitor)]
 	 ])

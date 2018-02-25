@@ -2,10 +2,11 @@
 	(:require
 		[chesslessons.firebase :as fbs]
 		[chesslessons.firebase.db :as db]
-		;		Utils
+;		Utils
 		[chesslessons.atom.utils  :refer [atom! action!]]
-		[chesslessons.normalize-user.utils :refer [normalize_user format_visitors]]
+		[chesslessons.normalize-visitor.utils :refer [normalize_visitor format_visitors]]
 ; 		Models
+		[chesslessons.visitor-model :refer [set_visitor]]
 		[chesslessons.visitors-model :as visitors_model]
 		))
 
@@ -30,7 +31,7 @@
 	(action! "[admin.model/set_admin]" new_admin)
 	(if (nil? new_admin)
 		(reset! admin new_admin)
-		(reset! admin (normalize_user new_admin))
+		(reset! admin (normalize_visitor new_admin))
 		))
 
 
@@ -66,8 +67,8 @@
 	(action! "[visitors.model/add_visitors_change_listener]")
 	(db/add_listener_on_visitors_collection -on_listener_visitors_change))
 
-(defn- -?admin [user]
-	(= (:imail user) "admin@i.ua"))
+(defn- -?admin [admin]
+	(= (aget admin "email") "admin@i.ua"))
 
 
 
@@ -83,8 +84,9 @@
 
 ; ==================
 ; Auth
-(defn auth_state_change_handler [user]
-	(if (-?admin user) (set_admin user)))
+(defn auth_state_change_handler [admin_or_visitor]
+	(if (and admin_or_visitor (-?admin admin_or_visitor))
+		(set_admin admin_or_visitor)))
 
 (.onAuthStateChanged (fbs/auth) auth_state_change_handler)
 

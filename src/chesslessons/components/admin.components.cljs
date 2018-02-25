@@ -80,17 +80,16 @@
 
 (defn render_admin_visitor_img_src [visitor]
 	(cond
-		(:facebook_link visitor) "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/facebook_square-48.png"
-		(:google_link visitor) "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/google_circle_color-48.png"
+	 (not= -1 (.indexOf (:link visitor) "facebook")) "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/facebook_square-48.png"
+     (not= -1 (.indexOf (:link visitor) "google")) "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/google_circle_color-48.png"
 		:else nil)
 		)
 
 
 (defn render_admin_visitor_link [visitor]
-	(if (or (:google_link visitor) (:facebook_link visitor))
-		[:a {:href (or (:google_link visitor) (:facebook_link visitor)) :cursor "pointer" :target "_blank"}
-			[:img {:src (render_admin_visitor_img_src visitor)}]]
-		))
+	[:a {:href (:link visitor) :cursor "pointer" :target "_blank"}
+	 	[:img {:src (render_admin_visitor_img_src visitor)}]]
+	)
 
 
 (defn render_admin_visitor [visitor]

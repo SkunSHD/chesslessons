@@ -3,7 +3,7 @@
 		[chesslessons.firebase.db :as db]
 		;		Utils
 		[chesslessons.atom.utils :refer [atom! action!]]
-		[chesslessons.normalize-user.utils :refer [normalize_user format_visitors]]))
+		[chesslessons.normalize-visitor.utils :refer [normalize_visitor format_visitors]]))
 
 
 (def log (.-log js/console))

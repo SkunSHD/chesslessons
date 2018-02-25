@@ -1,6 +1,8 @@
 (ns chesslessons.firebase
 	(:require
 		[reagent.core :refer [atom cursor]]
+		[chesslessons.firebase.user :refer [upodate_user]]
+
 		))
 
 (def log (.-log js/console))
@@ -24,26 +26,26 @@
 (def facebook_auth_provider (new (.-FacebookAuthProvider (.-auth firebase))))
 
 
-(defn facebook_link_user [user credential]
-	(.then (.link user credential) (fn [wtf] (log "VSE" wtf))))
+(defn facebook_link_user [visitor credential]
+	(.then (.link visitor credential) (fn [wtf] (log "VSE" wtf))))
 
 
 (defn facebook_fect_provider_for_email [email credential]
 	(.then (.fetchProvidersForEmail (auth) email)
 	       (fn [providers]
 		       (.then (.signInWithEmailAndPassword (auth) email "ward121314")
-		              (fn [user] (facebook_link_user user credential))))))
+		              (fn [visitor] (facebook_link_user visitor credential))))))
 
 
 (defn facebook_auth_error [error]
 	(log "response" error)
 	(if (=(.-code error) "auth/account-exists-with-different-credential")
-		(log "[CURE]: delete [user] in [firebase/authentification/users] with same email")))
+		(log "[CURE]: delete [visitor] in [firebase/authentification/visitors] with same email")))
 
 
-(defn facebook_auth [than]
+(defn facebook_auth [callback]
 	(.catch (.then
-		  (.signInWithPopup (auth) facebook_auth_provider) than)
+		  (.signInWithPopup (auth) facebook_auth_provider) callback)
 	        facebook_auth_error))
 
 
@@ -55,15 +57,10 @@
 (defn google_auth_error [error]
 	(log error)
 	(if (=(.-code error) "auth/account-exists-with-different-credential")
-		(facebook_fect_provider_for_email (.-email error) (.-credential error))))
+        (log "google_auth_error" error)))
 
 
 (defn google_auth [callback]
 	(.catch (.then
-		(.signInWithPopup (auth) google_auth_provider)
-			(fn[new_user]
-				(set!
-					(.-google_link (.-profile (.-additionalUserInfo new_user)))
-					(str "https://plus.google.com/" (aget new_user "additionalUserInfo" "profile" "id")))
-				(callback new_user)))
+		(.signInWithPopup (auth) google_auth_provider) callback)
 			google_auth_error))

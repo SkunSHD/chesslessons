@@ -3,7 +3,7 @@
 		[chesslessons.firebase :as fbs]
 ;       Models
 		[chesslessons.sign_in-model :as sign_in-model]
-		[chesslessons.visitor-model :as user_model]
+		[chesslessons.visitor-model :as visitor_model]
 ))
 
 
@@ -19,10 +19,10 @@
 
 	 [:div.form-group {:style {:display (if @sign_in-model/is_button_visible "block" "none")}}
 	  [:img {:src "https://i.stack.imgur.com/ZW4QC.png"
-	         :onClick #(fbs/facebook_auth user_model/set_user)
+	         :onClick #(fbs/facebook_auth visitor_model/set_visitor)
 	         :style {:cursor "pointer"} }]
 	  [:img {:src "https://developers.google.com/+/images/branding/sign-in-buttons/Red-signin_Google_base_44dp.png"
-	         :onClick #(fbs/google_auth user_model/set_user)
+	         :onClick #(fbs/google_auth visitor_model/set_visitor)
 	         :style {:cursor "pointer" :height 60} }]
 	  ]
 	 ]
