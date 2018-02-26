@@ -80,10 +80,9 @@
 
 (defn render_admin_visitor_img_src [visitor]
 	(cond
-	 (not= -1 (.indexOf (:link visitor) "facebook")) "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/facebook_square-48.png"
-     (not= -1 (.indexOf (:link visitor) "google")) "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/google_circle_color-48.png"
-		:else nil)
-		)
+		(not= -1 (.indexOf (:link visitor) "facebook")) "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/facebook_square-48.png"
+		(not= -1 (.indexOf (:link visitor) "google")) "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/google_circle_color-48.png"
+		:else nil))
 
 
 (defn render_admin_visitor_link [visitor]
@@ -92,11 +91,22 @@
 	)
 
 
+(defn render_added_date [visitor]
+	(.toLocaleDateString (new js/Date (:timestamp visitor))))
+
+
+(defn render_date_diff [visitor]
+	(let [days_diff (- (.getUTCDate (new js/Date (- (.getTime (new js/Date)) (:timestamp visitor)))) 1)]
+				(if (not= days_diff 0) (str days_diff  "day(s) ago") "today")
+		))
+
+
 (defn render_admin_visitor [visitor]
 	[:li {:key (:uid visitor) :style {:position "relative"}}
 		 [:img {:src (:photo visitor) :width 50 :height 50}]
 		 [:p "email: " (:email visitor)]
 		 [:p "name: " (:name visitor)]
+	     [:p "Signed up " (render_date_diff visitor) ". (" (render_added_date visitor)")"]
 		 [render_admin_visitor_link visitor]
 		 [:button.close {:type "button" :aria-label "Close"
 						:style {:position "absolute" :right 0 :top 0}
