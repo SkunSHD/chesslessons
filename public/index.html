@@ -8,6 +8,24 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" type="text/css">
 
+    <style type=text/css>
+      .cf:before,
+      .cf:after {
+        content: " ";
+        display: table;
+      }
+      .cf:after {
+        clear: both;
+      }
+      /**
+	   * For IE 6/7 only
+	   * Include this rule to trigger hasLayout and contain floats.
+	   */
+      .cf {
+        *zoom: 1;
+      }
+    </style>
+
     <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase-firestore.js"></script>
     <script>

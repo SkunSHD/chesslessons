@@ -17,13 +17,18 @@
 
 (defn render []
 	[:div
-	  [:div.alert.alert-warning.alert-dismissible.fade.show {:role "alert"}
-	   "Hi, " [:strong (visitor_name)] "! I'm gonna send you a massage or something in closest future!"
-	   [:button.close {:type "button" :data-dismiss "alert" :aria-label "Close"}
-	   	[:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]]
+	  [:div.alert.alert-warning.alert-dismissible.fade.show.cf {:role "alert"}
+	   [:p "Hi, " [:strong (visitor_name)] "! I'm gonna send you a massage soon!"]
 
-	   [:a {:href (:link @visitor)}
-			 [:img { :width 150 :height 150 :src (:photo @visitor)}]
-			 [:h3 "User name:" (:name @visitor)]]
-		 [:h6 "Email: " (:email@visitor)]
+	   [:button.close {:type "button" :data-dismiss "alert" :aria-label "Close"}
+	   	[:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
+
+	   [:a {:href (:link @visitor) :style { :float "left" }}
+		[:img { :width 150 :height 150 :src (:photo @visitor)}]]
+
+	   [:div
+		[:h3 "User name:" (:name @visitor)]
+		[:h6 "Email: " (:email@visitor)]]
+
+	   ]
 	 ])

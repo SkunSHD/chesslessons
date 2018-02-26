@@ -12,7 +12,7 @@
 
 (defn render []
 	[:div
-	 (if (nil? @visitor_model/visitor)
-		 [sign_in_components/render]
+	 [sign_in_components/render]
+	 (if-not (nil? @visitor_model/visitor)
 		 [profile_components/render])
 	 ])

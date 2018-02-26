@@ -68,5 +68,5 @@
 
 
 (defn format_visitors [visitors]
-	(map (fn [visitor] (js->clj (.data visitor) :keywordize-keys true))
-		 (aget visitors "docs")))
+	(let [formatted_visitors (map (fn [visitor] (js->clj (.data visitor) :keywordize-keys true)) (aget visitors "docs"))]
+		(sort-by :timestamp < formatted_visitors)))

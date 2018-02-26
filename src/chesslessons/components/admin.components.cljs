@@ -79,6 +79,7 @@
 
 
 (defn render_admin_visitor_img_src [visitor]
+
 	(cond
 		(not= -1 (.indexOf (:link visitor) "facebook")) "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/facebook_square-48.png"
 		(not= -1 (.indexOf (:link visitor) "google")) "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/google_circle_color-48.png"
@@ -86,8 +87,10 @@
 
 
 (defn render_admin_visitor_link [visitor]
-	[:a {:href (:link visitor) :cursor "pointer" :target "_blank"}
-	 	[:img {:src (render_admin_visitor_img_src visitor)}]]
+	(if (:link visitor)
+		[:a {:href (:link visitor) :cursor "pointer" :target "_blank"}
+		 [:img {:src (render_admin_visitor_img_src visitor)}]])
+
 	)
 
 
@@ -97,7 +100,13 @@
 
 (defn render_date_diff [visitor]
 	(let [days_diff (- (.getUTCDate (new js/Date (- (.getTime (new js/Date)) (:timestamp visitor)))) 1)]
-				(if (not= days_diff 0) (str days_diff  "day(s) ago") "today")
+				(if (not= days_diff 0) (str days_diff  "day(s) ago") "today in ")
+		))
+
+
+(defn render_seconds_diff [visitor]
+	(let [days_diff (- (.getUTCDate (new js/Date (- (.getTime (new js/Date)) (:timestamp visitor)))) 1)]
+		(if (not= days_diff 0) (str days_diff  "day(s) ago") "today")
 		))
 
 
