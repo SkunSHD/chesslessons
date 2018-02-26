@@ -35,7 +35,6 @@
 
 
 (defn get_visitors []
-	(log 4242352)
 	(action! "[visitors.model/get_visitors]")
 	(.catch
 		(.then (db/get_all_visitors)

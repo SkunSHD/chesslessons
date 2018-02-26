@@ -28,6 +28,7 @@
 
 
 (defn- -on_admin_form_submit []
+	(log "on_admin_form_submit")
 	(.then (fbs_user/upodate_user (clj->js @admin_info)) #(admin_model/set_admin fbs_user/user)))
 
 
