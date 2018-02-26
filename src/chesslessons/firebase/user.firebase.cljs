@@ -6,4 +6,4 @@
 
 
 (defn upodate_user [fields]
-	(.updateProfile user fields))
+	(.updateProfile (.-currentUser (.auth js/firebase)) fields))

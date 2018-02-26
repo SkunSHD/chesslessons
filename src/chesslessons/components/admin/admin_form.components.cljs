@@ -11,8 +11,8 @@
 ; ==================
 ; Atoms
 (defonce admin_info (atom {
-	:displayName ""
-	:photoURL ""
+	:displayName nil
+	:photoURL nil
 }))
 
 
@@ -28,7 +28,11 @@
 
 (defn- -on_admin_form_submit []
 	(log "on_admin_form_submit")
-	(.then (fbs_user/upodate_user (clj->js @admin_info)) #(admin_model/set_admin fbs_user/user)))
+	(.then (fbs_user/upodate_user
+	    (clj->js {
+			:displayName (or(:displayName @admin_info) (:name @admin_model/admin))
+			:photoURL (or (:photoURL @admin_info) (:photo @admin_model/admin))
+		})) #(admin_model/set_admin fbs_user/user)))
 
 
 ; ==================
