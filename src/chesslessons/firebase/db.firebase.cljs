@@ -41,6 +41,5 @@
 		#(log "delete visitor error" %))
 	)
 
-; TODO: move this to admin model?
 (defn add_listener_on_visitors_collection [callback]
 	(.onSnapshot (:visitors collections) callback))

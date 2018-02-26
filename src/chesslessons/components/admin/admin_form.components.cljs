@@ -11,10 +11,9 @@
 ; ==================
 ; Atoms
 (defonce admin_info (atom {
-	:displayName (or (:name @admin_model/admin)"")
-	:photoURL (or (:photo @admin_model/admin)"")
+	:displayName (or (:name @admin_model/admin) "")
+	:photoURL (or (:photo @admin_model/admin) "")
 }))
-
 
 
 ; ==================

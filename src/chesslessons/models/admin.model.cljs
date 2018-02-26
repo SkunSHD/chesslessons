@@ -1,10 +1,12 @@
 (ns chesslessons.admin-model
 	(:require
 		[chesslessons.firebase :as fbs]
+		[chesslessons.firebase.db :as db]
 ;		Utils
 		[chesslessons.atom.utils  :refer [atom! action!]]
-		[chesslessons.normalize-user.utils :refer [normalize_user]]
+		[chesslessons.normalize-visitor.utils :refer [normalize_visitor format_visitors]]
 ; 		Models
+		[chesslessons.visitor-model :refer [set_visitor]]
 		[chesslessons.visitors-model :as visitors_model]
 		))
 
@@ -29,7 +31,7 @@
 	(action! "[admin.model/set_admin]" new_admin)
 	(if (nil? new_admin)
 		(reset! admin new_admin)
-		(reset! admin (normalize_user new_admin))
+		(reset! admin (normalize_visitor new_admin))
 		))
 
 
@@ -53,18 +55,38 @@
 
 
 ; ==================
+; Privat
+(defn- -on_listener_visitors_change [visitors]
+	(if-not (aget visitors "empty")
+		(do
+			(action! "[visitors.model/on_listener_visitors_change]" (format_visitors visitors))
+			(visitors_model/set_visitors (format_visitors visitors))))
+	)
+
+(defn- -add_listener_visitors_change []
+	(action! "[visitors.model/add_visitors_change_listener]")
+	(db/add_listener_on_visitors_collection -on_listener_visitors_change))
+
+(defn- -?admin [admin]
+	(= (aget admin "email") "admin@i.ua"))
+
+
+
+
+; ==================
 ; Watchers
 (defn- -on_change_admin [key atom old new]
 	(if (and (nil? old) (not= old new))
-		(visitors_model/get_visitors)))
+		(-add_listener_visitors_change)))
+
 (add-watch admin "[admin.model] ADMIN-MODEL-CHANGE-ADMIN" -on_change_admin)
 
 
 ; ==================
 ; Auth
-(defn auth_state_change_handler [user]
-	(log "auth_state_change_handler!" user)
-	(set_admin user))
+(defn auth_state_change_handler [admin_or_visitor]
+	(if (and admin_or_visitor (-?admin admin_or_visitor))
+		(set_admin admin_or_visitor)))
 
 (.onAuthStateChanged (fbs/auth) auth_state_change_handler)
 
