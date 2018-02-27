@@ -58,10 +58,10 @@
 ; ==================
 ; Privat
 (defn- -on_visitors_collection_change [visitors]
-	(if-not (aget visitors "empty")
-		(do
-			(action! "[visitors.model/on_visitors_collection_change]" (format_visitors visitors))
-			(visitors_model/set_visitors (format_visitors visitors))))
+	(let [visitors_formatted (if (aget visitors "empty") {} (format_visitors visitors))]
+		(action! "[visitors.model/on_visitors_collection_change]" visitors_formatted)
+		(visitors_model/set_visitors  visitors_formatted)
+		)
 	)
 
 (defn- -add_visitors_collection_change_listener []
