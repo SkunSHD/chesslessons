@@ -23,10 +23,10 @@
 	   	[:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
 
 	   [:div.row {:style {:padding-top 20}}
-		[:div.col-2
+		[:div.col-4
 		 [:a {:href (:link @visitor)}
 		  [:img { :width 150 :height 150 :src (:photo @visitor)}]]]
-		[:div.col-5
+		[:div.col-8
 		 [:h4 "User name:" (:name @visitor)]
 		 [:h6 "Email: " (:email@visitor)]]
 		]

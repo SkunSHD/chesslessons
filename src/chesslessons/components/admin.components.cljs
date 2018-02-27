@@ -95,18 +95,14 @@
 
 
 (defn render_added_date [visitor]
-	(.toLocaleDateString (new js/Date (:timestamp visitor))))
+	 (let [date (new js/Date (:timestamp visitor))]
+							 (str (.toLocaleDateString date "ru") " " (.getHours date) ":" (.getMinutes date)))
+	)
 
 
 (defn render_date_diff [visitor]
-	(let [days_diff (- (.getUTCDate (new js/Date (- (.getTime (new js/Date)) (:timestamp visitor)))) 1)]
-				(if (not= days_diff 0) (str days_diff  "day(s) ago") "today in ")
-		))
-
-
-(defn render_seconds_diff [visitor]
-	(let [days_diff (- (.getUTCDate (new js/Date (- (.getTime (new js/Date)) (:timestamp visitor)))) 1)]
-		(if (not= days_diff 0) (str days_diff  "day(s) ago") "today")
+	(let [days_diff (Math/round (/ (- (.getTime (new js/Date)) (:timestamp visitor)) 1000 60 60 24))]
+		(if (= days_diff 0) "today" (str days_diff  " day(s) ago"))
 		))
 
 
