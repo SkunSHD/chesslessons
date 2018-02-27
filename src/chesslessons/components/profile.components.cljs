@@ -1,7 +1,7 @@
 (ns chesslessons.components.profile.components
 	(:require
 ;       Models
-		[chesslessons.visitor-model :refer [visitor, logout]]
+		[chesslessons.visitor-model :refer [visitor]]
 ;       Utils
 		[goog.string :as gstring]
 		[clojure.string :as str]
@@ -17,18 +17,18 @@
 
 (defn render []
 	[:div
-	  [:div.alert.alert-warning.alert-dismissible.fade.show.cf {:role "alert"}
-	   [:p "Hi, " [:strong (visitor_name)] "! I'm gonna send you a massage soon!"]
-
+	  [:div.alert.alert-warning.alert-dismissible.fade.show {:role "alert"}
+	   "Hi, " [:strong (visitor_name)] "! I'm gonna send you a massage soon!"
 	   [:button.close {:type "button" :data-dismiss "alert" :aria-label "Close"}
 	   	[:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
 
-	   [:a {:href (:link @visitor) :style { :float "left" }}
-		[:img { :width 150 :height 150 :src (:photo @visitor)}]]
-
-	   [:div
-		[:h3 "User name:" (:name @visitor)]
-		[:h6 "Email: " (:email@visitor)]]
-
+	   [:div.row {:style {:padding-top 20}}
+		[:div.col-2
+		 [:a {:href (:link @visitor)}
+		  [:img { :width 150 :height 150 :src (:photo @visitor)}]]]
+		[:div.col-5
+		 [:h4 "User name:" (:name @visitor)]
+		 [:h6 "Email: " (:email@visitor)]]
+		]
 	   ]
 	 ])

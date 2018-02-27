@@ -25,7 +25,7 @@
                                                                                          :data-toggle "dropdown"
                                                                                          :aria-haspopup "true"
                                                                                          :aria-expanded "false"} (:name @admin_model/admin)]
-                                             [:div.dropdown-menu {:aria-labelledby "dropdownMenuButton" :style {:right 0}}
+                                             [:div.dropdown-menu {:aria-labelledby "dropdownMenuButton" :style {:right 0 :left "auto"}}
                                                 [:span.dropdown-item {:onClick #(nav! "/admin/edit")} "Edit admin"]
                                                 [:span.dropdown-item {:onClick #(nav! "/admin")} "Visitors"]
                                                 [:span.dropdown-item {:onClick #(admin_model/log_out_admin)} "Log out"]

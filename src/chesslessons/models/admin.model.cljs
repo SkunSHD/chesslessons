@@ -45,6 +45,7 @@
 
 
 (defn log_out_admin []
+	(fbs/unsubscribe_collection)
 	(.catch
 	(.then (fbs/sign_out)
        (fn []
@@ -56,28 +57,28 @@
 
 ; ==================
 ; Privat
-(defn- -on_listener_visitors_change [visitors]
+(defn- -on_visitors_collection_change [visitors]
 	(if-not (aget visitors "empty")
 		(do
-			(action! "[visitors.model/on_listener_visitors_change]" (format_visitors visitors))
+			(action! "[visitors.model/on_visitors_collection_change]" (format_visitors visitors))
 			(visitors_model/set_visitors (format_visitors visitors))))
 	)
 
-(defn- -add_listener_visitors_change []
-	(action! "[visitors.model/add_visitors_change_listener]")
-	(db/add_listener_on_visitors_collection -on_listener_visitors_change))
+(defn- -add_visitors_collection_change_listener []
+	(action! "[admin.model/add_visitors_change_listener]")
+	(if (nil? @fbs/unsubscribe_collection_func)
+		(let [unsubscribe_collection_func (db/add_listener_on_visitors_collection -on_visitors_collection_change)]
+			(fbs/set_unsubscribe_collection_func unsubscribe_collection_func))))
 
 (defn- -?admin [admin]
 	(= (aget admin "email") "admin@i.ua"))
-
-
 
 
 ; ==================
 ; Watchers
 (defn- -on_change_admin [key atom old new]
 	(if (and (nil? old) (not= old new))
-		(-add_listener_visitors_change)))
+		(-add_visitors_collection_change_listener)))
 
 (add-watch admin "[admin.model] ADMIN-MODEL-CHANGE-ADMIN" -on_change_admin)
 
@@ -85,7 +86,8 @@
 ; ==================
 ; Auth
 (defn auth_state_change_handler [admin_or_visitor]
-	(if (and admin_or_visitor (-?admin admin_or_visitor))
+	(if (or (nil? admin_or_visitor)
+			(and admin_or_visitor (-?admin admin_or_visitor)))
 		(set_admin admin_or_visitor)))
 
 (.onAuthStateChanged (fbs/auth) auth_state_change_handler)
