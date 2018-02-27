@@ -11,8 +11,8 @@
 ; ==================
 ; Atoms
 (defonce admin_info (atom {
-	:displayName (or (:name @admin_model/admin) "")
-	:photoURL (or (:photo @admin_model/admin) "")
+	:displayName nil
+	:photoURL nil
 }))
 
 
@@ -28,13 +28,17 @@
 
 (defn- -on_admin_form_submit []
 	(log "on_admin_form_submit")
-	(.then (fbs_user/upodate_user (clj->js @admin_info)) #(admin_model/set_admin fbs_user/user)))
+	(.then (fbs_user/upodate_user
+	    (clj->js {
+			:displayName (or(:displayName @admin_info) (:name @admin_model/admin))
+			:photoURL (or (:photoURL @admin_info) (:photo @admin_model/admin))
+		})) #(admin_model/set_admin fbs_user/user)))
 
 
 ; ==================
 ; Components
 (defn render_admin_form []
-	(log @admin_info)
+	(log @admin_model/admin)
 	[:div
 	 [:form {:style {:text-align "left"}}
 	  [:h1.h3.mb-3.font-weight-normal "Edit admin info"]
@@ -44,7 +48,7 @@
 	   [:input.form-control {
 		    :placeholder "Name"
 		    :onChange (fn [e] (-set_admin_info_field :displayName (.-value (.-target e))))
-		    :value (:displayName @admin_info)
+		    :value (or(:displayName @admin_info) (:name @admin_model/admin))
 		    :type "text"}]
 	   ]
 	
@@ -54,7 +58,7 @@
 	   [:input.form-control {
 	        :placeholder "Photo"
 	        :onChange (fn [e] (-set_admin_info_field :photoURL (.-value (.-target e))))
-	        :value (:photoURL @admin_info)
+	        :value (or (:photoURL @admin_info) (:photo @admin_model/admin))
 	        :type "text"}]
 	   ]
 	  ]
