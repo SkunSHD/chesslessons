@@ -90,6 +90,7 @@
 			(and admin_or_visitor (-?admin admin_or_visitor)))
 		(set_admin admin_or_visitor)))
 
-(.onAuthStateChanged (fbs/auth) auth_state_change_handler)
+(defn auth_init []
+	(.onAuthStateChanged (fbs/auth) auth_state_change_handler))
 
 

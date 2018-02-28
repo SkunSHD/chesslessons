@@ -10,6 +10,7 @@
 
 (def collections {
 	 :visitors (.collection firestore "visitors")
+	 :trash (.collection firestore "trash")
 })
 
 
@@ -24,6 +25,9 @@
 (defn get_visitor_by_email [email]
 	(.get (.where (:visitors collections) "email" "==" email)))
 
+(defn get_visitor_by_uid [uid]
+	(.get (.doc (:visitors collections) uid)))
+
 (defn get_all_visitors []
 	(.get (:visitors collections)))
 
@@ -35,10 +39,21 @@
 		))
 	)
 
+(defn save_visitor_in_trash [visitor]
+	(let [visitor_data (.data visitor)]
+		(log (aget visitor_data "uid") (.-data visitor) "save_visitor_in_trash2")
+		(.set (.doc (:trash collections) (aget visitor_data "uid")) visitor_data))
+	)
+
+(defn backup_visitor [uid]
+	(.then (get_visitor_by_uid uid) save_visitor_in_trash))
+
 (defn delete_visitor [uid]
-	(.then (.delete (.doc (:visitors collections) uid))
-		#(log "delete visitor success, uid:" uid)
-		#(log "delete visitor error" %))
+	(.then (backup_visitor uid) (fn []
+			(.then (.delete (.doc (:visitors collections) uid))
+				   #(log "delete visitor success, uid:" uid)
+				   #(log "delete visitor error" %))))
+
 	)
 
 (defn add_listener_on_visitors_collection [callback]

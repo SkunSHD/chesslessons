@@ -20,14 +20,14 @@
 	  (if (nil? @admin_model/admin)
           (if-not (?current_page "admin_page") [:button {:onClick #(nav! "/admin")} "Login as admin"])
           [:div.dropdown
-                                             [:button.btn.btn-secondary.dropdown-toggle {:type "button"
-                                                                                         :id "dropdownMenuButton"
-                                                                                         :data-toggle "dropdown"
-                                                                                         :aria-haspopup "true"
-                                                                                         :aria-expanded "false"} (:name @admin_model/admin)]
-                                             [:div.dropdown-menu {:aria-labelledby "dropdownMenuButton" :style {:right 0 :left "auto"}}
-                                                [:span.dropdown-item {:onClick #(nav! "/admin/edit")} "Edit admin"]
-                                                [:span.dropdown-item {:onClick #(nav! "/admin")} "Visitors"]
-                                                [:span.dropdown-item {:onClick #(admin_model/log_out_admin)} "Log out"]
-                                              ]])
+			 [:button.btn.btn-secondary.dropdown-toggle {:type "button"
+														 :id "dropdownMenuButton"
+														 :data-toggle "dropdown"
+														 :aria-haspopup "true"
+														 :aria-expanded "false"} (:name @admin_model/admin)]
+			 [:div.dropdown-menu {:aria-labelledby "dropdownMenuButton" :style {:right 0 :left "auto"}}
+				[:span.dropdown-item {:onClick #(nav! "/admin/edit")} "Edit admin"]
+				[:span.dropdown-item {:onClick #(nav! "/admin")} "Visitors"]
+				[:span.dropdown-item {:onClick #(admin_model/log_out_admin)} "Log out"]
+			  ]])
 	 ])

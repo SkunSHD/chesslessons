@@ -42,4 +42,5 @@
 
 
 (defn init! []
-  (mount-root))
+  (mount-root)
+	(admin_model/auth_init))
