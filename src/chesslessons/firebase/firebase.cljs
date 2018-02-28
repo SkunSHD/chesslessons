@@ -25,7 +25,8 @@
 
 ; ==================
 ; Atoms
-(defonce unsubscribe_collection_func (atom! "atom! [firebase/unsubscribe_collection_func]" nil))
+(defonce unsubscribe_collection_functions
+	(atom! "atom! [firebase/unsubscribe_collection_functions]" {:visitors nil :trash nil}))
 
 
 ; ==================
@@ -63,14 +64,20 @@
 
 ; ==================
 ; Public
-(defn set_unsubscribe_collection_func [func]
-	(set! unsubscribe_collection_func func))
+(defn set_unsubscribe_collection_func [id func]
+	(swap! unsubscribe_collection_functions assoc id func))
 
 
-(defn unsubscribe_collection []
-	(log unsubscribe_collection_func)
-	(unsubscribe_collection_func)
-	(set! unsubscribe_collection_func nil))
+(defn unsubscribe_collections []
+	; https://stackoverflow.com/questions/6685916/how-to-iterate-over-map-keys-and-values
+	(doseq [[key val] @unsubscribe_collection_functions]
+		(let [item_unsubscribe_func (key @unsubscribe_collection_functions)]
+			(if-not (nil? item_unsubscribe_func) (do
+													 (item_unsubscribe_func)
+													 (swap! unsubscribe_collection_functions assoc key nil)))
+			))
+;
+	)
 
 
 (defn facebook_auth [callback]

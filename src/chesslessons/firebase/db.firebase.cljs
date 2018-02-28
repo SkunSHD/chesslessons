@@ -52,8 +52,7 @@
 	(.then (backup_visitor uid) (fn []
 			(.then (.delete (.doc (:visitors collections) uid))
 				   #(log "delete visitor success, uid:" uid)
-				   #(log "delete visitor error" %))))
-
+			   #(log "delete visitor error" %))))
 	)
 
 (defn add_listener_on_visitors_collection [callback]

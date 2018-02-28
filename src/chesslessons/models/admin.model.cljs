@@ -45,7 +45,7 @@
 
 
 (defn log_out_admin []
-	(fbs/unsubscribe_collection)
+	(fbs/unsubscribe_collections)
 	(.catch
 	(.then (fbs/sign_out)
        (fn []
@@ -66,9 +66,9 @@
 
 (defn- -add_visitors_collection_change_listener []
 	(action! "[admin.model/add_visitors_change_listener]")
-	(if (nil? @fbs/unsubscribe_collection_func)
+	(if (nil? (:visitors @fbs/unsubscribe_collection_functions))
 		(let [unsubscribe_collection_func (db/add_listener_on_visitors_collection -on_visitors_collection_change)]
-			(fbs/set_unsubscribe_collection_func unsubscribe_collection_func))))
+			(fbs/set_unsubscribe_collection_func :visitors unsubscribe_collection_func))))
 
 (defn- -?admin [admin]
 	(= (aget admin "email") "admin@i.ua"))
