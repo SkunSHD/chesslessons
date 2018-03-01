@@ -44,14 +44,13 @@
 		))
 	)
 
-(defn save_visitor_in_trash [visitor]
+(defn save_deleted_visitor [visitor]
 	(let [visitor_data (.data visitor)]
-		(log (aget visitor_data "uid") (.-data visitor) "save_visitor_in_trash2")
 		(.set (.doc (:deleted_visitors collections) (aget visitor_data "uid")) visitor_data))
 	)
 
 (defn backup_visitor [uid]
-	(.then (get_visitor_by_uid uid) save_visitor_in_trash))
+	(.then (get_visitor_by_uid uid) save_deleted_visitor))
 
 (defn delete_visitor [uid]
 	(.then (backup_visitor uid) (fn []

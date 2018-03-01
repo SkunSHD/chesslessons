@@ -18,7 +18,7 @@
 ; Atoms
 (defonce email (atom ""))
 (defonce password (atom ""))
-(defonce toggle (atom "new"))
+(defonce tab (atom "new"))
 
 
 ; ==================
@@ -47,13 +47,17 @@
 (defn- -delete_visitor [uid]
 	(db/delete_visitor uid))
 
+(defn- -toggle_active_class [new_el]
+	(let [old_el_class_list  (.-classList (.querySelector js/document ".nav-link.active"))]
+		(if (.-length old_el_class_list) (do
+											 (.remove old_el_class_list "active")
+											 (.add (.-classList new_el) "active")))))
 
-; ==================
-; Public
-(defn- -toggle_button [event tab_name]
+(defn- -on_tab_click_handler [event tab_name]
 	(.preventDefault event)
-	(reset! toggle tab_name))
-
+	(reset! tab tab_name)
+	(-toggle_active_class (.-target event))
+	)
 
 
 ; ==================
@@ -139,23 +143,28 @@
 		 ^{:key visitor} (render_admin_visitor visitor))])
 
 
-(defn render_navigation []
-	[:nav.navbar.navbar-light.bg-light
-	 [:form.form-inline
-	  [:button.btn.btn-outline-success {:on-click #(-toggle_button % "new") :type "button"} "New"]
-	  [:button.btn.btn-outline-secondary {:on-click #(-toggle_button % "deleted") :type "button"} "Deleted"]]])
-
-
-(defn reder_visitors_or_trash []
-	(case @toggle
+(defn reder_tab []
+	(case @tab
 		"new" [render_admin_visitors]
 		"deleted" [render_admin_deleted_visitors]
 		nil))
 
 
+(defn render_navigation [child]
+	[:div.card.text-center
+	 [:div.card-header
+	  [:ul.nav.nav-tabs.card-header-tabs
+	   [:li.nav-item
+		[:a.nav-link.active {:on-click #(-on_tab_click_handler % "new")} "New"]]
+	   [:li.nav-item
+		[:a.nav-link {:on-click #(-on_tab_click_handler % "deleted")} "Deleted"]]]]
+	 [:div.card-body
+	  [child]]
+	 ])
+
+
 (defn render_admin_container []
 	 [:div
-	   	[:h1 "admin container"]
-	  	[render_navigation]
-	  	[reder_visitors_or_trash]
+	   	[:h1 "Visitors:"]
+	  	(render_navigation reder_tab)
 	  ])
