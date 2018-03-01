@@ -14,6 +14,9 @@
 (defonce visitors (atom! "[visitors.model/visitors]" {}))
 (defonce visitors_error_msg (atom! "[visitors.model/visitors_error_msg]" ""))
 
+(defonce deleted_visitors (atom! "[visitors.model/deleted_visitors]" {}))
+(defonce deleted_visitors_error_msg (atom! "[visitors.model/deleted_visitors_error_msg]" ""))
+
 
 ; ==================
 ; Private
@@ -34,9 +37,11 @@
 	(reset! visitors_error_msg errors))
 
 
-(defn get_visitors []
-	(action! "[visitors.model/get_visitors]")
-	(.catch
-		(.then (db/get_all_visitors)
-		       (fn [visitors] (set_visitors (format_visitors visitors))))
-		(fn [error] set_visitors_error_msg (.-message error))))
+(defn set_deleted_visitors [new_deleted_visitors]
+	(action! "[visitors.model/set_deleted_visitors]" new_deleted_visitors)
+	(reset! deleted_visitors new_deleted_visitors))
+
+
+(defn set_deleted_visitors_error_msg [errors]
+	(action! "[visitors.model/set_deleted_visitors_error_msg]" errors)
+	(reset! visitors_error_msg errors))

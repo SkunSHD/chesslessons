@@ -57,28 +57,40 @@
 
 ; ==================
 ; Privat
-(defn- -on_visitors_collection_change [visitors]
-	(let [visitors_formatted (if (aget visitors "empty") {} (format_visitors visitors))]
-		(action! "[visitors.model/on_visitors_collection_change]" visitors_formatted)
-		(visitors_model/set_visitors  visitors_formatted)
-		)
-	)
-
-(defn- -add_visitors_collection_change_listener []
-	(action! "[admin.model/add_visitors_change_listener]")
-	(if (nil? (:visitors @fbs/unsubscribe_collection_functions))
-		(let [unsubscribe_collection_func (db/add_listener_on_visitors_collection -on_visitors_collection_change)]
-			(fbs/set_unsubscribe_collection_func :visitors unsubscribe_collection_func))))
-
 (defn- -?admin [admin]
 	(= (aget admin "email") "admin@i.ua"))
 
+
+(defn- -on_visitors_collection_change [collection_name]
+	(fn [visitors]
+		(let [visitors_formatted (if (aget visitors "empty") {} (format_visitors visitors))]
+			(action! (str "[visitors.model/on_collection_change] " collection_name)  visitors_formatted)
+			(case collection_name
+				:visitors (visitors_model/set_visitors  visitors_formatted)
+				:deleted_visitors (visitors_model/set_deleted_visitors  visitors_formatted))
+			)
+	)
+)
+
+
+(defn- -add_collection_change_listener [collection_name]
+	(action! (str "[admin.model/add_collection_change_listener] " collection_name))
+	(if (nil? (collection_name @fbs/unsubscribe_collection_functions))
+		(let [unsubscribe_collection_func (db/add_listener_on_collection collection_name (-on_visitors_collection_change collection_name))]
+			(fbs/set_unsubscribe_collection_func collection_name unsubscribe_collection_func)))
+	)
+
+
+(defn -add_db_change_listeners []
+	(-add_collection_change_listener :visitors)
+	(-add_collection_change_listener :deleted_visitors)
+	)
 
 ; ==================
 ; Watchers
 (defn- -on_change_admin [key atom old new]
 	(if (and (nil? old) (not= old new))
-		(-add_visitors_collection_change_listener)))
+		(-add_db_change_listeners)))
 
 (add-watch admin "[admin.model] ADMIN-MODEL-CHANGE-ADMIN" -on_change_admin)
 

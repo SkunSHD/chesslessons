@@ -26,7 +26,7 @@
 ; ==================
 ; Atoms
 (defonce unsubscribe_collection_functions
-	(atom! "atom! [firebase/unsubscribe_collection_functions]" {:visitors nil :trash nil}))
+	(atom! "atom! [firebase/unsubscribe_collection_functions]" {:visitors nil :deleted_visitors nil}))
 
 
 ; ==================
@@ -64,8 +64,8 @@
 
 ; ==================
 ; Public
-(defn set_unsubscribe_collection_func [id func]
-	(swap! unsubscribe_collection_functions assoc id func))
+(defn set_unsubscribe_collection_func [collection_name func]
+	(swap! unsubscribe_collection_functions assoc collection_name func))
 
 
 (defn unsubscribe_collections []
@@ -76,7 +76,6 @@
 													 (item_unsubscribe_func)
 													 (swap! unsubscribe_collection_functions assoc key nil)))
 			))
-;
 	)
 
 

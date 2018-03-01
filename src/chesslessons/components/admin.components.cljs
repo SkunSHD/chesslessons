@@ -133,17 +133,23 @@
 		 ^{:key visitor} (render_admin_visitor visitor))])
 
 
+(defn render_admin_deleted_visitors []
+	[:ul {:style {:text-align "left" :list-style "none"}}
+	 (for [visitor @visitors_model/deleted_visitors]
+		 ^{:key visitor} (render_admin_visitor visitor))])
+
+
 (defn render_navigation []
 	[:nav.navbar.navbar-light.bg-light
 	 [:form.form-inline
 	  [:button.btn.btn-outline-success {:on-click #(-toggle_button % "new") :type "button"} "New"]
-	  [:button.btn.btn-outline-secondary {:on-click #(-toggle_button % "trash") :type "button"} "Trash"]]])
+	  [:button.btn.btn-outline-secondary {:on-click #(-toggle_button % "deleted") :type "button"} "Deleted"]]])
 
 
 (defn reder_visitors_or_trash []
 	(case @toggle
 		"new" [render_admin_visitors]
-		"trash" [:p "trash is empty"]
+		"deleted" [render_admin_deleted_visitors]
 		nil))
 
 

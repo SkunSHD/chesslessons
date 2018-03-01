@@ -10,7 +10,7 @@
 
 (def collections {
 	 :visitors (.collection firestore "visitors")
-	 :trash (.collection firestore "trash")
+	 :deleted_visitors (.collection firestore "deleted_visitors")
 })
 
 
@@ -22,6 +22,8 @@
 	             (js->clj (aget visitors "docs"))))))
 
 
+; ==================
+; Public
 (defn get_visitor_by_email [email]
 	(.get (.where (:visitors collections) "email" "==" email)))
 
@@ -30,6 +32,9 @@
 
 (defn get_all_visitors []
 	(.get (:visitors collections)))
+
+(defn get_all_deleted_visitors []
+	(.get (:deleted_visitors collections)))
 
 (defn save_visitor [new_visitor]
 	(.then (get_visitor_by_email (:email new_visitor)) (fn [visitors]
@@ -42,7 +47,7 @@
 (defn save_visitor_in_trash [visitor]
 	(let [visitor_data (.data visitor)]
 		(log (aget visitor_data "uid") (.-data visitor) "save_visitor_in_trash2")
-		(.set (.doc (:trash collections) (aget visitor_data "uid")) visitor_data))
+		(.set (.doc (:deleted_visitors collections) (aget visitor_data "uid")) visitor_data))
 	)
 
 (defn backup_visitor [uid]
@@ -55,5 +60,5 @@
 			   #(log "delete visitor error" %))))
 	)
 
-(defn add_listener_on_visitors_collection [callback]
-	(.onSnapshot (:visitors collections) callback))
+(defn add_listener_on_collection [collection_name handler]
+	(.onSnapshot (collection_name collections) handler))
