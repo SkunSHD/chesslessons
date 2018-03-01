@@ -30,12 +30,6 @@
 (defn get_visitor_by_uid [uid]
 	(.get (.doc (:visitors collections) uid)))
 
-(defn get_all_visitors []
-	(.get (:visitors collections)))
-
-(defn get_all_deleted_visitors []
-	(.get (:deleted_visitors collections)))
-
 (defn save_visitor [new_visitor]
 	(.then (get_visitor_by_email (:email new_visitor)) (fn [visitors]
 		(if (-visitors_exists? visitors)
@@ -57,6 +51,25 @@
 			(.then (.delete (.doc (:visitors collections) uid))
 				   #(log "delete visitor success, uid:" uid)
 			   #(log "delete visitor error" %))))
+	)
+
+(defn delete_visitor_complitly [uid]
+	(.then (.delete (.doc (:deleted_visitors collections) uid))
+		   #(log "delete visitor success, uid:" uid)
+		   #(log "delete visitor error" %))
+	)
+
+
+(defn restore_deleted_visitor [uid]
+	; 1 read visitor from deleted collection
+	; 2 write visitor in normal collection
+	; 3 delete visitor from deleted collection
+	(.then (.get (.doc (:deleted_visitors collections) uid))
+		   (fn [deleted_visitor]
+
+			   (let [deleted_visitor_data  (.data deleted_visitor)]
+				   (.then (.set (.doc (:visitors collections) (aget deleted_visitor_data "uid")) deleted_visitor_data)
+					   #(delete_visitor_complitly uid)))))
 	)
 
 (defn add_listener_on_collection [collection_name handler]

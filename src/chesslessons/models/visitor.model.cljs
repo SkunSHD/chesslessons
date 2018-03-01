@@ -1,8 +1,7 @@
 (ns chesslessons.visitor-model
 	(:require
 		[chesslessons.firebase.db :as db]
-
-        ;		Utils
+;		Utils
         [chesslessons.normalize-visitor.utils :refer [normalize_visitor]]
 		[chesslessons.atom.utils  :refer [atom! action!]]
 ))
