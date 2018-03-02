@@ -57,7 +57,7 @@
 
 ; ==================
 ; Privat
-(defn- -?admin [admin]
+(defn- -admin? [admin]
 	(= (aget admin "email") "admin@i.ua"))
 
 
@@ -99,7 +99,7 @@
 ; Auth
 (defn auth_state_change_handler [admin_or_visitor]
 	(if (or (nil? admin_or_visitor)
-			(and admin_or_visitor (-?admin admin_or_visitor)))
+			(and admin_or_visitor (-admin? admin_or_visitor)))
 		(set_admin admin_or_visitor)))
 
 (defn auth_init []

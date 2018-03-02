@@ -5,6 +5,8 @@
 ;		Models
 		[chesslessons.admin-model :as admin_model]
         [chesslessons.visitors-model :as visitors_model]
+;		Components
+		[chesslessons.components.pagination.components :as pagination_component]
 ;       Utils
 		[chesslessons.firebase.db :as db]
 		[goog.string :as gstring]
@@ -123,7 +125,7 @@
 
 
 (defn render_admin_visitor [visitor]
-	[:li {:key (:uid visitor) :style {:position "relative"}}
+	[:li {:key (:key visitor) :style {:position "relative"}}
 	 [:img {:src (:photo visitor) :width 50 :height 50}]
 	 [:p "email: " (:email visitor)]
 	 [:p "name: " (:name visitor)]
@@ -138,7 +140,7 @@
 
 
 (defn render_deleted_admin_visitor [visitor]
-	[:li {:key (:uid visitor) :style {:position "relative"}}
+	[:li {:key (:key visitor) :style {:position "relative"}}
 		 [:img {:src (:photo visitor) :width 50 :height 50}]
 		 [:p "email: " (:email visitor)]
 		 [:p "name: " (:name visitor)]
@@ -158,13 +160,13 @@
 (defn render_admin_visitors []
 	[:ul {:style {:text-align "left" :list-style "none"}}
 	 (for [visitor @visitors_model/visitors]
-			 ^{:key (:email visitor)} (render_admin_visitor visitor))])
+			 ^{:key (:key visitor)} (render_admin_visitor visitor))])
 
 
 (defn render_admin_deleted_visitors []
 	[:ul {:style {:text-align "left" :list-style "none"}}
 	 (for [visitor @visitors_model/deleted_visitors]
-		 ^{:key (:email visitor)} (render_deleted_admin_visitor visitor))])
+		 ^{:key (:key visitor)} (render_deleted_admin_visitor visitor))])
 
 
 (defn reder_tab []
@@ -191,4 +193,5 @@
 	 [:div
 	   	[:h1 "Visitors:"]
 	  	(render_navigation reder_tab)
+	  [pagination_component/render]
 	  ])
