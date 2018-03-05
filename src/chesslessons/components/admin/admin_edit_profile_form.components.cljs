@@ -1,10 +1,11 @@
-(ns chesslessons.components.admin.admin-form.components
+(ns chesslessons.components.admin.admin-edit-form.components
 	(:require
 		[reagent.core :refer [atom]]
 		[chesslessons.firebase.user :as fbs_user]
 ;		Models
 		[chesslessons.admin-model :as admin_model]
 ))
+
 
 (def log (.-log js/console))
 
