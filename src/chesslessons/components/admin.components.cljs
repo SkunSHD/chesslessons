@@ -47,7 +47,6 @@
 		))
 
 (defn- -delete_visitor [collection_name uid]
-	(log collection_name " uid: " uid)
 	(case collection_name
 		:visitors (db/delete_visitor uid)
 		:deleted_visitors (db/delete_visitor_complitly uid)))
@@ -127,7 +126,7 @@
 (defn render_admin_visitor [visitor]
 	[:li {:key (:key visitor) :style {:position "relative"}}
 	 [:img {:src (:photo visitor) :width 50 :height 50}]
-	 [:p "email: " (:email visitor)]
+	 [:p "email: " (:key visitor)]
 	 [:p "name: " (:name visitor)]
 	 [:p "Signed up " (render_date_diff visitor) ". (" (render_added_date visitor)")"]
 	 [render_admin_visitor_link visitor]
@@ -142,7 +141,7 @@
 (defn render_deleted_admin_visitor [visitor]
 	[:li {:key (:key visitor) :style {:position "relative"}}
 		 [:img {:src (:photo visitor) :width 50 :height 50}]
-		 [:p "email: " (:email visitor)]
+		 [:p "email: " (:key visitor)]
 		 [:p "name: " (:name visitor)]
 	     [:p "Signed up " (render_date_diff visitor) ". (" (render_added_date visitor)")"]
 		 [render_admin_visitor_link visitor]
@@ -159,13 +158,13 @@
 
 (defn render_admin_visitors []
 	[:ul {:style {:text-align "left" :list-style "none"}}
-	 (for [visitor @visitors_model/visitors]
+	 (for [visitor (visitors_model/get_current_page_visitors @tab)]
 			 ^{:key (:key visitor)} (render_admin_visitor visitor))])
 
 
 (defn render_admin_deleted_visitors []
 	[:ul {:style {:text-align "left" :list-style "none"}}
-	 (for [visitor @visitors_model/deleted_visitors]
+	 (for [visitor (visitors_model/get_current_page_visitors @tab)]
 		 ^{:key (:key visitor)} (render_deleted_admin_visitor visitor))])
 
 
