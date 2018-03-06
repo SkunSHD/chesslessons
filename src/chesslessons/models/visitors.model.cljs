@@ -59,7 +59,10 @@
 
 
 (defn get_current_page_visitors [collection_name]
-	(let [pagination_current_page (collection_name (:current @pagination))]
-		(nth (case collection_name
-				 :visitors @visitors
-				 :deleted_visitors @deleted_visitors) pagination_current_page)))
+	(let [pagination_current_page (collection_name (:current @pagination))
+		  collection_current (case collection_name
+								 :visitors @visitors
+								 :deleted_visitors @deleted_visitors)
+		  ]
+		(if (> (count collection_current) 0)
+					(nth collection_current pagination_current_page))))
