@@ -10,12 +10,7 @@
 ; ==================
 ; Atoms
 (defonce pagination (atom {
-							  :display 5
-							  :current { :visitors 0 :deleted_visitors 0 }
-							  }))
+						 :current 0
+						 :display 5
+						 }))
 
-
-; ==================
-; Public
-(defn set_current_pagination_page [number tab]
-	(swap! pagination assoc-in [:current tab] number))

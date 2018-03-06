@@ -1,20 +1,20 @@
 (ns chesslessons.core
     (:require
-		[reagent.core :as r]
-		[chesslessons.firebase :as fbs :refer [firebase]]
-;		History
-		[chesslessons.history :as history :refer [nav!]]
-;		Layout
-		[chesslessons.layout :as layout]
-;       Models
-		[chesslessons.visitor-model :as visitor_model]
-		[chesslessons.admin-model :as admin_model]
-;		Components
-		[chesslessons.components.nav.components :as nav_components]
-))
+        [reagent.core :as reagent]
+        [chesslessons.firebase :as fbs :refer [firebase]]
+        ;		History
+        [chesslessons.history :as history :refer [nav!]]
+        ;		Layout
+        [chesslessons.layout :as layout]
+        ;       Models
+        [chesslessons.visitor-model :as visitor_model]
+        [chesslessons.admin-model :as admin_model]
+        ;		Components
+        [chesslessons.components.nav.components :as nav_components]
+        ))
 
 (def log (.-log js/console))
-
+(enable-console-print!)
 
 
 ; APP ID 1001305193295261
@@ -24,23 +24,26 @@
 ;; -------------------------
 ;; Views
 (defn render_container []
-	[:div
-	 [nav_components/render_nav]
-	 [:div.text-center.container
-	  [layout/render]]
-	 ])
+    [:div
+     [nav_components/render_nav]
+     [:div.text-center.container
+      [layout/render]]
+     ])
 
 
 (defn home-page []
-  [render_container])
+    [render_container])
 
 
 ;; -------------------------
 ;; Initialize app
-(defn mount-root []
-  (r/render [home-page] (.getElementById js/document "app")))
+(reagent/render-component [home-page] (.getElementById js/document "app"))
 
 
-(defn init! []
-  (mount-root)
-	(admin_model/auth_init))
+(defn on-js-reload []
+    ;; optionally touch your app-state to force rerendering depending on
+    ;; your application
+    ;; (swap! app-state update-in [:__figwheel_counter] inc)
+    )
+
+(admin_model/auth_init)

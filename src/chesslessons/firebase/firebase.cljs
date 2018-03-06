@@ -34,6 +34,17 @@
 (def facebook_auth_provider (new (.-FacebookAuthProvider (.-auth firebase))))
 
 
+(defn facebook_link_user [visitor credential]
+	(.then (.link visitor credential) (fn [wtf] (log "VSE" wtf))))
+
+
+(defn facebook_fect_provider_for_email [email credential]
+	(.then (.fetchProvidersForEmail (auth) email)
+	       (fn [providers]
+		       (.then (.signInWithEmailAndPassword (auth) email "ward121314")
+		              (fn [visitor] (facebook_link_user visitor credential))))))
+
+
 (defn facebook_auth_error [error]
 	(log "response" error)
 	(if (=(.-code error) "auth/account-exists-with-different-credential")

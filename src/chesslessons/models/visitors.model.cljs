@@ -1,12 +1,9 @@
 (ns chesslessons.visitors-model
 	(:require
 		[chesslessons.firebase.db :as db]
-;		Utils
+		;		Utils
 		[chesslessons.atom.utils :refer [atom! action!]]
-		[chesslessons.normalize-visitor.utils :refer [normalize_visitor format_visitors]]
-; 		Models
-		[chesslessons.pagination-model :refer [pagination]]
-		))
+		[chesslessons.normalize-visitor.utils :refer [normalize_visitor format_visitors]]))
 
 
 (def log (.-log js/console))
@@ -14,10 +11,10 @@
 
 ; ==================
 ; Atoms
-(defonce visitors (atom! "[visitors.model/visitors]" '()))
+(defonce visitors (atom! "[visitors.model/visitors]" {}))
 (defonce visitors_error_msg (atom! "[visitors.model/visitors_error_msg]" ""))
 
-(defonce deleted_visitors (atom! "[visitors.model/deleted_visitors]" '()))
+(defonce deleted_visitors (atom! "[visitors.model/deleted_visitors]" {}))
 (defonce deleted_visitors_error_msg (atom! "[visitors.model/deleted_visitors_error_msg]" ""))
 
 
@@ -28,17 +25,11 @@
 	     (aget visitors "docs")))
 
 
-(defn- -chunck_visitors_for_pagination [visitors]
-	(partition (:display @pagination) visitors))
-
-
 ; ==================
 ; Actions
 (defn set_visitors [new_visitors]
-	(let [chunked_visitors_list (-chunck_visitors_for_pagination new_visitors)]
-		(action! "[visitors.model/set_visitors]" chunked_visitors_list)
-		(reset! visitors chunked_visitors_list))
-	)
+	(action! "[visitors.model/set_visitors]" new_visitors)
+	(reset! visitors new_visitors))
 
 
 (defn set_visitors_error_msg [errors]
@@ -47,19 +38,10 @@
 
 
 (defn set_deleted_visitors [new_deleted_visitors]
-	(let [chunked_deleted_visitors_list (-chunck_visitors_for_pagination new_deleted_visitors)]
-		(action! "[visitors.model/set_deleted_visitors]" chunked_deleted_visitors_list)
-		(reset! deleted_visitors chunked_deleted_visitors_list))
-	)
+	(action! "[visitors.model/set_deleted_visitors]" new_deleted_visitors)
+	(reset! deleted_visitors new_deleted_visitors))
 
 
 (defn set_deleted_visitors_error_msg [errors]
 	(action! "[visitors.model/set_deleted_visitors_error_msg]" errors)
 	(reset! visitors_error_msg errors))
-
-
-(defn get_current_page_visitors [collection_name]
-	(let [pagination_current_page (collection_name (:current @pagination))]
-		(nth (case collection_name
-				 :visitors @visitors
-				 :deleted_visitors @deleted_visitors) pagination_current_page)))
