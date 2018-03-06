@@ -86,7 +86,7 @@
 	[:div
 	 [:h1 "Visitors:"]
 	 [render_navigation render_admin_visitors]
-	 [pagination_component/render]
+	 [pagination_component/render @tab]
 	 ])
 
 
