@@ -67,7 +67,7 @@
 	 ])
 
 
-(defn render_navigation [child]
+(defn render_tab_and_visitors_container []
 	[:div.card.text-center
 	 [:div.card-header
 	  [:ul.nav.nav-tabs.card-header-tabs
@@ -76,7 +76,7 @@
 	   [:li.nav-item
 		[:a.nav-link {:on-click #(-on_tab_click_handler % :deleted_visitors)} "Deleted"]]]]
 	 [:div.card-body
-	  [child]]
+	  [render_admin_visitors]]
 	 ])
 
 
@@ -85,7 +85,7 @@
 (defn render_admin_container []
 	[:div
 	 [:h1 "Visitors:"]
-	 [render_navigation render_admin_visitors]
+	 [render_tab_and_visitors_container]
 	 [pagination_component/render tab]
 	 ])
 

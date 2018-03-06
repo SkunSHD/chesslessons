@@ -27,8 +27,10 @@
 (defn get_visitor_by_email [email]
 	(.get (.where (:visitors collections) "email" "==" email)))
 
+
 (defn get_visitor_by_uid [uid]
 	(.get (.doc (:visitors collections) uid)))
+
 
 (defn save_visitor [new_visitor]
 	(.then (get_visitor_by_email (:email new_visitor)) (fn [visitors]
@@ -38,13 +40,16 @@
 		))
 	)
 
+
 (defn save_deleted_visitor [visitor]
 	(let [visitor_data (.data visitor)]
 		(.set (.doc (:deleted_visitors collections) (aget visitor_data "uid")) visitor_data))
 	)
 
+
 (defn backup_visitor [uid]
 	(.then (get_visitor_by_uid uid) save_deleted_visitor))
+
 
 (defn delete_visitor [uid]
 	(.then (backup_visitor uid) (fn []
@@ -52,6 +57,7 @@
 				   #(log "delete visitor success, uid:" uid)
 			   #(log "delete visitor error" %))))
 	)
+
 
 (defn delete_visitor_complitly [uid]
 	(.then (.delete (.doc (:deleted_visitors collections) uid))

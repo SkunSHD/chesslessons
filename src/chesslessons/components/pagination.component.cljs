@@ -32,7 +32,7 @@
 
 (defn render [tab]
 	(let [tab_prop tab]
-		(if (> (visitors_size tab_prop) 0)
+		(if (> (visitors_size tab_prop) 1)
 			[:nav
 			 [render_pagination_items tab_prop]
 			 ]))

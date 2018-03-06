@@ -29,7 +29,7 @@
 
 
 (defn- -chunck_visitors_for_pagination [visitors]
-	(partition (:display @pagination) visitors))
+	(partition (:display @pagination) nil nil visitors))
 
 
 ; ==================
