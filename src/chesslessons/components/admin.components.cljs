@@ -5,7 +5,7 @@
 		[chesslessons.admin-model :as admin_model]
         [chesslessons.visitors-model :as visitors_model]
 ;		Components
-		[chesslessons.components.pagination.components :as pagination_component]
+		[chesslessons.components.pagination.component :as pagination_component]
 		[chesslessons.components.admin.admin-visitor.components :as visitor_component]
 ))
 
@@ -86,7 +86,7 @@
 	[:div
 	 [:h1 "Visitors:"]
 	 [render_navigation render_admin_visitors]
-	 [pagination_component/render]
+	 [pagination_component/render tab]
 	 ])
 
 
