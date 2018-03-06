@@ -2,6 +2,7 @@
 	(:require
 		[reagent.core :refer [atom cursor]]
 ;		Models
+		[chesslessons.search-model :refer [search]]
 		[chesslessons.admin-model :as admin_model]
         [chesslessons.visitors-model :as visitors_model]
 ;		Components
@@ -59,6 +60,7 @@
 
 
 (defn render_admin_visitors []
+	(log @search)
 	[:ul {:style {:text-align "left" :list-style "none"}}
 	 (let [tab_key @tab]
 		 (for [visitor (visitors_model/get_current_page_visitors tab_key)]

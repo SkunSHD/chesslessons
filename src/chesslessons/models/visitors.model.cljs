@@ -66,3 +66,13 @@
 		  ]
 		(if (> (count collection_current) 0)
 					(nth collection_current pagination_current_page))))
+
+
+(defn get_search_visitors [collection_name]
+	(let [collection_current (case collection_name
+								 :visitors @visitors
+								 :deleted_visitors @deleted_visitors)
+		  ]
+		(let [flat_visitors (flatten collection_current)]
+			(log "flat_visitors" flat_visitors)
+			)))
