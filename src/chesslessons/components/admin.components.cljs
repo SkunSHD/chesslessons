@@ -2,11 +2,12 @@
 	(:require
 		[reagent.core :refer [atom cursor]]
 ;		Models
-		[chesslessons.search-model :refer [search]]
+		[chesslessons.search-model :refer [search is_searching search_visitors]]
 		[chesslessons.admin-model :as admin_model]
         [chesslessons.visitors-model :as visitors_model]
 ;		Components
 		[chesslessons.components.pagination.component :as pagination_component]
+		[chesslessons.components.admin_search.component :refer [render_admin_search]]
 		[chesslessons.components.admin.admin-visitor.components :as visitor_component]
 ))
 
@@ -60,11 +61,12 @@
 
 
 (defn render_admin_visitors []
-	(log @search)
 	[:ul {:style {:text-align "left" :list-style "none"}}
-	 (let [tab_key @tab]
-		 (for [visitor (visitors_model/get_current_page_visitors tab_key)]
-			 ^{:key (:key visitor)} (visitor_component/render visitor tab_key))
+	 (let [tab_key @tab visitors (if (is_searching)
+									 (search_visitors)
+									 (visitors_model/get_current_page_visitors tab_key))]
+		 (for [visitor visitors]
+			 ^{:key (:email visitor)} (visitor_component/render visitor tab_key))
 		 )
 	 ])
 
@@ -76,7 +78,8 @@
 	   [:li.nav-item
 		[:a.nav-link.active {:on-click #(-on_tab_click_handler % :visitors)} "New"]]
 	   [:li.nav-item
-		[:a.nav-link {:on-click #(-on_tab_click_handler % :deleted_visitors)} "Deleted"]]]]
+		[:a.nav-link {:on-click #(-on_tab_click_handler % :deleted_visitors)} "Deleted"]]]
+	  ]
 	 [:div.card-body
 	  [render_admin_visitors]]
 	 ])
@@ -87,6 +90,7 @@
 (defn render_admin_container []
 	[:div
 	 [:h1 "Visitors:"]
+	 [render_admin_search]
 	 [render_tab_and_visitors_container]
 	 [pagination_component/render tab]
 	 ])

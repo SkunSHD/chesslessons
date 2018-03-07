@@ -52,7 +52,7 @@
 (defn render [visitor tab]
 	[:li {:key (:email visitor) :style {:position "relative"}}
 	 [:img {:src (:photo visitor) :width 50 :height 50}]
-	 [:p "email: " (:key visitor)]
+	 [:p "email: " (:email visitor)]
 	 [:p "name: " (:name visitor)]
 	 [:p "Signed up " (render_date_diff visitor) ". (" (render_added_date visitor)")"]
 	 [render_admin_visitor_link visitor]
