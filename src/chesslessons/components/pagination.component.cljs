@@ -23,7 +23,7 @@
 (defn render_pagination_items [tab]
 	[:ul.pagination
 	 (let [display (:display @pagination) current (tab (:current @pagination))]
-		 (for [index (range (visitors_size))]
+		 (for [index (range (visitors_size tab))]
 		 ^{:key index} (render_pagination_item index current tab)
 		 ))
 	 ]
