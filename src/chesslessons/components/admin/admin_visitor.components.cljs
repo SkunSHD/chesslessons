@@ -50,15 +50,15 @@
 
 
 (defn render [visitor tab]
-	[:li {:key (:key visitor) :style {:position "relative"}}
+	[:li {:key (:email visitor) :style {:position "relative"}}
 	 [:img {:src (:photo visitor) :width 50 :height 50}]
-	 [:p "email: " (:key visitor)]
+	 [:p "email: " (:email visitor)]
 	 [:p "name: " (:name visitor)]
 	 [:p "Signed up " (render_date_diff visitor) ". (" (render_added_date visitor)")"]
 	 [render_admin_visitor_link visitor]
 	 [:button.close {:type "button" :aria-label "Close"
 					 :style {:position "absolute" :right 0 :top 0}
-					 :on-click #(-delete_visitor :deleted_visitors (:uid visitor))}
+					 :on-click #(-delete_visitor tab (:uid visitor))}
 	  [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
 
 	 (if (= tab :deleted_visitors)

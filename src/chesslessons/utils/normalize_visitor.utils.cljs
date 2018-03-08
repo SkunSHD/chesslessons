@@ -68,10 +68,14 @@
 
 
 (defn format_visitors [visitors]
-    (map (fn [index]
-             (let [form_visitor (.data (first (aget visitors "docs")))]
-                 (set! (.-key form_visitor) (str index "#"(.-email form_visitor)))
-                 (let [result (js->clj form_visitor :keywordize-keys true)]
-                     result)
-                 )
-             ) (range 20)))
+    (let [formatted_visitors (map (fn [visitor] (js->clj (.data visitor) :keywordize-keys true)) (aget visitors "docs"))]
+        (sort-by :timestamp > formatted_visitors)))
+
+;(defn format_visitors [visitors]
+;    (map (fn [index]
+;             (let [form_visitor (.data (first (aget visitors "docs")))]
+;                 (set! (.-key form_visitor) (str index "#"(.-email form_visitor)))
+;                 (let [result (js->clj form_visitor :keywordize-keys true)]
+;                     result)
+;                 )
+;             ) (range 20)))
