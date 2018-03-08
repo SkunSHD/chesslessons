@@ -63,7 +63,7 @@
 (defn render_admin_visitors []
 	[:ul {:style {:text-align "left" :list-style "none"}}
 	 (let [tab_key @tab visitors (if (is_searching)
-									 (search_visitors)
+									 (search_visitors tab_key)
 									 (visitors_model/get_current_page_visitors tab_key))]
 		 (for [visitor visitors]
 			 ^{:key (:email visitor)} (visitor_component/render visitor tab_key))

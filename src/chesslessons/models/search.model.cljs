@@ -2,7 +2,7 @@
 	(:require
 		[reagent.core :refer [atom cursor]]
 ; 		Models
-		[chesslessons.visitors-model :refer [visitors]]
+		[chesslessons.visitors-model :refer [visitors deleted_visitors]]
 ; 		Utils
 		[clojure.string :as s]
 		))
@@ -28,6 +28,12 @@
 	)
 
 
+(defn- -get_visitors_from_collection [collection_name]
+	(case collection_name
+				:visitors (flatten @visitors)
+				:deleted_visitors (flatten @deleted_visitors)))
+
+
 ; ==================
 ; Public
 (defn set_search [query]
@@ -43,8 +49,8 @@
 	(not (empty? @search)))
 
 
-(defn search_visitors []
+(defn search_visitors [collection_name]
 	(if (is_searching)
-		(let [query (s/lower-case @search) filtered_visitors (filter #(-match_visitor % query) (flatten @visitors))]
+		(let [query (s/lower-case @search) filtered_visitors (filter #(-match_visitor % query) (-get_visitors_from_collection collection_name))]
 			filtered_visitors
 			)))
