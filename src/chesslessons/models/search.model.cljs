@@ -52,6 +52,6 @@
 (defn search_visitors []
 	(log "here" (is_searching) (s/lower-case @search))
 	(if (is_searching)
-		(let [filtered_visitors (filter #(-match_visitor % (s/lower-case @search)) (flatten @visitors))]
+		(let [query (s/lower-case @search) filtered_visitors (filter #(-match_visitor % query) (flatten @visitors))]
 			filtered_visitors
 			)))
