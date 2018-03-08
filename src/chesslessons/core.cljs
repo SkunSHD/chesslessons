@@ -10,7 +10,7 @@
 		[chesslessons.visitor-model :as visitor_model]
 		[chesslessons.admin-model :as admin_model]
 ;		Components
-		[chesslessons.components.nav.components :as nav_components]
+		[chesslessons.components.nav.component :as nav_component]
 ))
 
 (def log (.-log js/console))
@@ -25,7 +25,7 @@
 ;; Views
 (defn render_container []
 	[:div
-	 [nav_components/render_nav]
+	 [nav_component/render]
 	 [:div.text-center.container
 	  [layout/render]]
 	 ])

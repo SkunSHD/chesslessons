@@ -8,7 +8,7 @@
 ;		Components
 		[chesslessons.components.pagination.component :as pagination_component]
 		[chesslessons.components.admin_search.component :refer [render_admin_search]]
-		[chesslessons.components.admin.admin-visitor.components :as visitor_component]
+		[chesslessons.components.admin.admin-visitor.component :as visitor_component]
 ))
 
 

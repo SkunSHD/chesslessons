@@ -1,4 +1,4 @@
-(ns chesslessons.components.nav.components
+(ns chesslessons.components.nav.component
 	 (:require
 		 [chesslessons.firebase :as fbs]
 		 [reagent.core :refer [atom cursor]]
@@ -10,7 +10,7 @@
 
 (def log (.-log js/console))
 
-(defn render_nav []
+(defn render []
 	[:nav.navbar.navbar-primary.bg-primary
 	 [:span {:onClick #(nav! "/") :style {:cursor "pointer"}}
 	  (if-not (nil? @admin_model/admin)

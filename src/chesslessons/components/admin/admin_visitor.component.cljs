@@ -1,4 +1,4 @@
-(ns chesslessons.components.admin.admin-visitor.components
+(ns chesslessons.components.admin.admin-visitor.component
 	(:require
 ; 		Utils
 		[chesslessons.firebase.db :as db]

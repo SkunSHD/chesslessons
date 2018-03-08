@@ -29,6 +29,10 @@
 	(atom! "atom! [firebase/unsubscribe_collection_functions]" {:visitors nil :deleted_visitors nil}))
 
 
+; TODO: Add user delete:
+; https://firebase.google.com/docs/auth/web/manage-users?authuser=0#delete_a_user
+
+
 ; ==================
 ; Facebook
 (def facebook_auth_provider (new (.-FacebookAuthProvider (.-auth firebase))))

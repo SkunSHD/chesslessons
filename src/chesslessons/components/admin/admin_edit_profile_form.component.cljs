@@ -1,4 +1,4 @@
-(ns chesslessons.components.admin.admin-edit-form.components
+(ns chesslessons.components.admin.admin-edit-form.component
 	(:require
 		[reagent.core :refer [atom]]
 		[chesslessons.firebase.user :as fbs_user]
@@ -36,9 +36,8 @@
 		})) #(admin_model/set_admin fbs_user/user)))
 
 
-; ==================
-; Components
-(defn render_admin_form []
+
+(defn render []
 	(log @admin_model/admin)
 	[:div
 	 [:form {:style {:text-align "left"}}

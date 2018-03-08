@@ -1,4 +1,4 @@
-(ns chesslessons.components.profile.components
+(ns chesslessons.components.profile.component
 	(:require
 ;       Models
 		[chesslessons.visitor-model :refer [visitor]]

@@ -1,4 +1,4 @@
-(ns chesslessons.components.sign_in.components
+(ns chesslessons.components.sign_in.component
 	(:require
 		[chesslessons.firebase :as fbs]
 		[reagent.core :refer [atom]]
