@@ -19,12 +19,6 @@
 ; ==================
 ; Privat
 (defn- -match_visitor [visitor query]
-	;	(if (or (s/includes?  (s/lower-case(:name visitor)) (s/lower-case @search))
-	;			(s/includes?  (s/lower-case(:email visitor)) (s/lower-case @search)))
-	;		(log "match " (:name visitor) (:email visitor))
-	;		)
-		(log "match " (:name visitor) (:email visitor))
-		(log "-------------00-------------")
 	(let [name (s/lower-case(:name visitor))
 		  email (s/lower-case(:email visitor))]
 
@@ -50,7 +44,6 @@
 
 
 (defn search_visitors []
-	(log "here" (is_searching) (s/lower-case @search))
 	(if (is_searching)
 		(let [query (s/lower-case @search) filtered_visitors (filter #(-match_visitor % query) (flatten @visitors))]
 			filtered_visitors

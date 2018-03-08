@@ -3,6 +3,7 @@
 ; 		Utils
 		[chesslessons.firebase.db :as db]
 		[goog.string :as gstring]
+		[clojure.string :as s]
 		))
 
 (def log (.-log js/console))
@@ -24,8 +25,8 @@
 ; Public
 (defn render_admin_visitor_img_src [visitor]
 	(cond
-		(not= -1 (.indexOf (:link visitor) "facebook")) "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/facebook_square-48.png"
-		(not= -1 (.indexOf (:link visitor) "google")) "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/google_circle_color-48.png"
+		(s/includes? (:link visitor) "facebook") "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/facebook_square-48.png"
+		(s/includes? (:link visitor) "google") "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/google_circle_color-48.png"
 		:else nil))
 
 
