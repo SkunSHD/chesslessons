@@ -29,30 +29,27 @@
 	(atom! "atom! [firebase/unsubscribe_collection_functions]" {:visitors nil :deleted_visitors nil}))
 
 
-; TODO: Add user delete:
-; https://firebase.google.com/docs/auth/web/manage-users?authuser=0#delete_a_user
-
-
 ; ==================
-; Facebook
-(def facebook_auth_provider (new (.-FacebookAuthProvider (.-auth firebase))))
+; Privat
+(defn- -delete_visitor_from_firebase []
+	(let [current_visitor (.-currentUser (auth))]
+		(.then (.delete current_visitor)
+				   #(log "visitor deleted from firebase successfully" current_visitor)
+				   #(log "visitor not deleted from firebase" %))
+		)
+	)
 
 
-(defn facebook_auth_error [error]
-	(log "response" error)
-	(if (=(.-code error) "auth/account-exists-with-different-credential")
-		(log "[CURE]: delete [visitor] in [firebase/authentification/visitors] with same email")))
-
-
-; ==================
-; Google
-(def google_auth_provider (new (.-GoogleAuthProvider (.-auth firebase))))
-
-
-(defn google_auth_error [error]
+(defn -auth_error-handler [error]
 	(log error)
 	(if (=(.-code error) "auth/account-exists-with-different-credential")
-        (log "google_auth_error" error)))
+		(log "auth_error" error)))
+
+
+(def -facebook_auth_provider (new (.-FacebookAuthProvider (.-auth firebase))))
+
+
+(def -google_auth_provider (new (.-GoogleAuthProvider (.-auth firebase))))
 
 
 ; ==================
@@ -74,11 +71,13 @@
 
 (defn facebook_auth [callback]
 	(.catch (.then
-				(.signInWithPopup (auth) facebook_auth_provider) callback)
-			facebook_auth_error))
+				(.signInWithPopup (auth) -facebook_auth_provider) callback)
+			-auth_error-handler))
 
 
 (defn google_auth [callback]
-	(.catch (.then
-				(.signInWithPopup (auth) google_auth_provider) callback)
-			google_auth_error))
+	(.catch
+		(.then
+			(.then (.signInWithPopup (auth) -google_auth_provider) callback
+				   -auth_error-handler)
+			-delete_visitor_from_firebase)))

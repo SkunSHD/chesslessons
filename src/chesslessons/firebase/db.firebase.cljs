@@ -33,6 +33,7 @@
 
 
 (defn save_visitor [new_visitor]
+	(log 1 "save_visitor")
 	(.then (get_visitor_by_email (:email new_visitor)) (fn [visitors]
 		(if (-visitors_exists? visitors)
 		    (log "Visitor already exists: " (:email new_visitor))
