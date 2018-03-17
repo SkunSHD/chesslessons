@@ -32,12 +32,12 @@
 	(.get (.doc (:visitors collections) uid)))
 
 
-(defn save_visitor [new_visitor]
+(defn save_visitor [new_visitor visitor_message]
 	(log 1 "save_visitor")
 	(.then (get_visitor_by_email (:email new_visitor)) (fn [visitors]
 		(if (-visitors_exists? visitors)
 		    (log "Visitor already exists: " (:email new_visitor))
-			(.set (.doc (:visitors collections) (:uid new_visitor)) (clj->js(merge new_visitor { :timestamp (.now js/Date) }))) )
+			(.set (.doc (:visitors collections) (:uid new_visitor)) (clj->js(merge new_visitor { :timestamp (.now js/Date) :visitor_message visitor_message}))) )
 		))
 	)
 

@@ -32,6 +32,11 @@
 	  [:img {:src "https://developers.google.com/+/images/branding/sign-in-buttons/Red-signin_Google_base_44dp.png"
 	         :onClick #(fbs/google_auth visitor_model/set_visitor)
 	         :style {:cursor "pointer" :height 60} }]
+	  [:div
+	   [:textarea {:on-change #(visitor_model/set_visitor_message (.-value (.-currentTarget %)))
+				   :value @visitor_model/visitor_message
+				   :rows 4 :cols 45
+				   :placeholder "Write here your question or phone number if you want me to call you back. Don't forget to enter via social network afterwords!"}]]
 	  ]
 	 ]
 	)
