@@ -40,7 +40,6 @@
 	(if (:link visitor)
 		[:a {:href (:link visitor) :cursor "pointer" :target "_blank"}
 		 [:img {:src (render_admin_visitor_img_src visitor)}]])
-
 	)
 
 
@@ -57,19 +56,18 @@
 
 
 (defn render_admin_visitor_message [visitor]
-	(let [message (:visitor_message visitor) is_long_text? (> (count message) 70)]
-		[:p "Message: "
-		 			(if (and is_long_text? (not @read_more))
-						(subs message 0 70)
-						message)
-					 (if is_long_text?
-						 [:span {:on-click #(reset! read_more (not @read_more))
-								 :style {:cursor "pointer" :color "blue" :text-decoration "underline" :display (if @read_more "block" "inline")}}
-						  (if @read_more "Minimize" "...")
-						 ])
-		 ]
-		)
-	)
+	(let [message       (:visitor_message visitor)
+		  is_long_text? (> (count message) 70)]
+		[:p
+			 [:span (merge-with into {:style {:paddingRight 10}}
+						   (if is_long_text?
+							   {:on-click #(reset! read_more (not @read_more))
+								:style {:cursor "pointer" :color "blue" :text-decoration "underline"}}))
+			  "Message:"]
+
+		 (if (and is_long_text? (not @read_more))
+			 (subs message 0 70)
+			 message)]))
 
 
 (defn render [visitor tab]
