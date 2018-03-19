@@ -4,7 +4,9 @@
 		[reagent.core :refer [atom]]
 ;       Models
 		[chesslessons.visitor-model :as visitor_model]
-))
+; 		Utils
+		[clojure.string :as srting]
+		))
 
 
 (def log (.-log js/console))
@@ -17,6 +19,21 @@
 (defn- -toggle_button [event]
 	(.preventDefault event)
 	(reset! toggle (not @toggle)))
+
+
+; ==================
+; Privat
+(defn- validate [text]
+	(let [valid_text (if (> (count text) 3000)
+						 (subs text 0 3000)
+						 text)]
+		(srting/trim valid_text))
+	)
+
+
+(defn- on_textarea_change [event]
+	(visitor_model/set_visitor_message (.-value (.-currentTarget event)))
+	)
 
 
 (defn render []
@@ -33,7 +50,7 @@
 	         :onClick #(fbs/google_auth visitor_model/set_visitor)
 	         :style {:cursor "pointer" :height 60} }]
 	  [:div
-	   [:textarea {:on-change #(visitor_model/set_visitor_message (.-value (.-currentTarget %)))
+	   [:textarea {:on-change on_textarea_change
 				   :value @visitor_model/visitor_message
 				   :rows 4 :cols 45
 				   :placeholder "Write here your question or phone number if you want me to call you back. Don't forget to enter via social network afterwords!"}]]

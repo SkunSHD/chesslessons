@@ -1,5 +1,6 @@
 (ns chesslessons.components.admin.admin-visitor.component
 	(:require
+		[reagent.core :refer [atom cursor]]
 ; 		Utils
 		[chesslessons.firebase.db :as db]
 		[goog.string :as gstring]
@@ -7,6 +8,11 @@
 		))
 
 (def log (.-log js/console))
+
+
+; ==================
+; Atoms
+(defonce read_more (atom false))
 
 
 ; ==================
@@ -50,12 +56,29 @@
 		))
 
 
+(defn render_admin_visitor_message [visitor]
+	(let [message (:visitor_message visitor) is_long_text? (> (count message) 70)]
+		[:p "Message: "
+		 			(if (and is_long_text? (not @read_more))
+						(subs message 0 70)
+						message)
+					 (if is_long_text?
+						 [:span {:on-click #(reset! read_more (not @read_more))
+								 :style {:cursor "pointer" :color "blue" :text-decoration "underline" :display (if @read_more "block" "inline")}}
+						  (if @read_more "Minimize" "...")
+						 ])
+		 ]
+		)
+	)
+
+
 (defn render [visitor tab]
 	[:li {:key (:email visitor) :style {:position "relative"}}
 	 [:img {:src (:photo visitor) :width 50 :height 50}]
 	 [:p "email: " (:email visitor)]
 	 [:p "name: " (:name visitor)]
 	 [:p "Signed up " (render_date_diff visitor) ". (" (render_added_date visitor)")"]
+	 [render_admin_visitor_message visitor]
 	 [render_admin_visitor_link visitor]
 	 [:button.close {:type "button" :aria-label "Close"
 					 :style {:position "absolute" :right 0 :top 0}
