@@ -10,6 +10,7 @@
 
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.946"]
+                 [org.clojure/core.async "0.2.374"]
                  [reagent "0.7.0"]
 
                  [secretary "1.2.3"]

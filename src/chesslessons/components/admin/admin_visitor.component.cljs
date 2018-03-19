@@ -11,11 +11,6 @@
 
 
 ; ==================
-; Atoms
-(defonce read_more (atom false))
-
-
-; ==================
 ; Privat
 (defn- -delete_visitor [collection_name uid]
 	(case collection_name
@@ -56,18 +51,21 @@
 
 
 (defn render_admin_visitor_message [visitor]
-	(let [message       (:visitor_message visitor)
-		  is_long_text? (> (count message) 70)]
-		[:p
-			 [:span (merge-with into {:style {:paddingRight 10}}
-						   (if is_long_text?
-							   {:on-click #(reset! read_more (not @read_more))
-								:style {:cursor "pointer" :color "blue" :text-decoration "underline"}}))
+	(let [read_more_atom (atom false)
+		  message        (:visitor_message visitor)
+		  is_long_text?  (> (count message) 70)]
+		(fn []
+			[:p
+			 [:span
+			  (merge-with into {:style {:paddingRight 10}}
+						  (if is_long_text?
+							  {:on-click #(reset! read_more_atom (not @read_more_atom))
+							   :style    {:cursor "pointer" :color "blue" :text-decoration "underline"}}))
 			  "Message:"]
 
-		 (if (and is_long_text? (not @read_more))
-			 (subs message 0 70)
-			 message)]))
+			 (if (and is_long_text? (not @read_more_atom))
+				 (str (subs message 0 70) " ...")
+				 message)])))
 
 
 (defn render [visitor tab]

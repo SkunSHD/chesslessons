@@ -22,9 +22,16 @@
 	(reset! visitor_message text))
 
 
+(defn clear_visitor_message []
+	(reset! visitor_message ""))
+
+
 ; ==================
 ; Actions
 (defn set_visitor [new_visitor]
     (action! "[visitor.model/set_visitor]" new_visitor)
 	(reset! visitor (normalize_visitor new_visitor))
-    (db/save_visitor  (normalize_visitor new_visitor) @visitor_message))
+	(.then
+		(db/save_visitor  (normalize_visitor new_visitor) @visitor_message)
+		#(clear_visitor_message))
+	)
