@@ -31,7 +31,7 @@
 
 ; ==================
 ; Privat
-(defn- -delete_visitor_from_firebase []
+(defn delete_current_visitor_from_firebase []
 	(let [current_visitor (.-currentUser (auth))]
 		(.then (.delete current_visitor)
 				   #(log "visitor deleted from firebase successfully" current_visitor)
@@ -80,4 +80,4 @@
 		(.then
 			(.then (.signInWithPopup (auth) -google_auth_provider) callback
 				   -auth_error-handler)
-			-delete_visitor_from_firebase)))
+			delete_current_visitor_from_firebase)))

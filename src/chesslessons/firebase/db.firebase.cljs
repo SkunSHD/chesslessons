@@ -10,6 +10,7 @@
 
 (def collections {
 	 :visitors (.collection firestore "visitors")
+	 :anonymous_messages (.collection firestore "anonymous_messages")
 	 :deleted_visitors (.collection firestore "deleted_visitors")
 })
 
@@ -39,6 +40,14 @@
 		    (log "Visitor already exists: " (:email new_visitor))
 			(.set (.doc (:visitors collections) (:uid new_visitor)) (clj->js(merge new_visitor { :timestamp (.now js/Date) :visitor_message visitor_message}))) )
 		))
+	)
+
+
+(defn save_anonymous_message [phone message]
+	(log "db" (js-obj phone message))
+	(.catch
+		(.then (.add (:anonymous_messages collections) (js-obj "phone" phone "message" message)) #(log "save_anonymous_message success"))
+			#(log "save_anonymous_message success"))
 	)
 
 
