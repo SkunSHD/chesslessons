@@ -14,13 +14,14 @@
 
 ;; ==================
 ;; Atoms
-(defonce toggledOn (atom nil))
 (defonce visitor_info (atom {:phone "" :message ""}))
+(defonce toggle (atom ""))
 
 
-(defn- -toggle_button [event]
+(defn- -toggle_button [event group_name]
 	(.preventDefault event)
-	(reset! toggledOn (not @toggledOn)))
+
+	(reset! toggle (if (= group_name @toggle) "" group_name)))
 
 
 ; ==================
@@ -38,7 +39,6 @@
 	)
 
 (defn- sign_in_anonimously []
-	(log "sign_in_anonimously")
 	(.catch (.signInAnonymously (fbs/auth))
 			(fn [error]
 				(log "signInAnonymously error" error))))
@@ -63,36 +63,64 @@
 	)
 
 
-(defn render []
-	[:form
-	 [:p.h1 "Chess Lessons"]
-	 [:p.h3 "Looking for private in-home or in-studio Chess lessons? Coach is ready to get you started. Let's start today!"]
-	 [:button.btn.btn-primary {:on-click -toggle_button} "Get in touch with me"]
-
-	 [:div.form-group {:style {:display (if @toggledOn "block" "none")}}
+(defn render_social_network_auth []
+	[:div {:style {:display (if (= @toggle "social_nertwork" ) "block" "none")}}
+	 [:div.form-group
 	  [:img {:src "https://i.stack.imgur.com/ZW4QC.png"
-	         :onClick #(fbs/facebook_auth visitor_model/set_visitor)
-	         :style {:cursor "pointer"} }]
+			 :onClick #(fbs/facebook_auth visitor_model/set_visitor)
+			 :style {:cursor "pointer"} }]
 	  [:img {:src "https://developers.google.com/+/images/branding/sign-in-buttons/Red-signin_Google_base_44dp.png"
-	         :onClick #(fbs/google_auth visitor_model/set_visitor)
-	         :style {:cursor "pointer" :height 60} }]
-	  [:div
-	   [:textarea {:on-change on_textarea_change
-				   :value @visitor_model/visitor_message
-				   :rows 4 :cols 45
-				   :placeholder "Write here your question or phone number if you want me to call you back. Don't forget to enter via social network afterwords!"}]]
+			 :onClick #(fbs/google_auth visitor_model/set_visitor)
+			 :style {:cursor "pointer" :height 60} }]
+	  [:div.input-group
+	   [:div.input-group-prepend
+		[:span.input-group-text "Message"]]
+	   [:textarea.form-control {:on-change on_textarea_change
+							   :value @visitor_model/visitor_message
+							   :placeholder "Write here your question"}]]
 	  ]
-	 [:button.btn.btn-success {:on-click -toggle_button} "Call me back"]
+	 ])
 
-	 [:div
-	  [:input {:value (:phone @visitor_info) :on-change (on_visitor_info_change :phone)}]
-	  [:div
-	   [:textarea {:on-change (on_visitor_info_change :message)
-				   :value (:message @visitor_info)
-				   :rows 4 :cols 45
-				   :placeholder "Send me a question"}]
-	    ]
 
-	  [:button {:on-click on_call_back_handle} "Call me back"]]
+(defn render_anonymous_auth []
+	[:div {:style {:display (if (= @toggle "anonymous" ) "block" "none")}}
+	 [:div.input-group
+	  [:div.input-group-prepend
+	   [:span.input-group-text {:style {:padding-left 48}} "+38"]]
+	  [:input.form-control {:value (:phone @visitor_info)
+							:on-change (on_visitor_info_change :phone)
+							:type "text"
+							:aria-label "Telephone number"
+							:placeholder "Phone number"}]
+	  ]
+	 [:div.input-group
+	  [:div.input-group-prepend
+	   [:span.input-group-text "Message"]]
+
+	  [:textarea.form-control
+	   {:on-change   (on_visitor_info_change :message)
+		:value       (:message @visitor_info)
+		:placeholder "Send me a question"
+		:aria-label  "Leave a message"}]]
+	 [:button.btn.btn-warning {:on-click on_call_back_handle} "Send info"]
+	 ]
+	)
+
+
+(defn render []
+	(log @toggle)
+	[:div.row.justify-content-md-center
+	 [:div.col.col-lg-6
+	  [:form
+	   [:p.h1 "Chess Lessons"]
+	   [:p.h3 "Looking for private in-home or in-studio Chess lessons? Coach is ready to get you started. Let's start today!"]
+	   [:button.btn.btn-success {:on-click #(-toggle_button % "social_nertwork")
+								 :class (if (= @toggle "social_nertwork") "active" "")} "Leave my social network contacts"]
+	   [:button.btn.btn-success {:on-click #(-toggle_button % "anonymous")
+								 :class (if (= @toggle "anonymous") "active" "")} "Call me back"]
+	   [render_social_network_auth]
+	   [render_anonymous_auth]
+	   ]
+	  ]
 	 ]
 	)
