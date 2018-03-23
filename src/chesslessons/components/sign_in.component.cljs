@@ -45,7 +45,7 @@
 
 (defn- save_anonimous_info []
 	(log "sign_in comp: save_anonimous_info")
-	(db/save_anonymous_message (:phone @visitor_info) (:message @visitor_info))
+	(db/save_anonymous_message (js/parseInt (:phone @visitor_info)) (:message @visitor_info))
 	)
 
 

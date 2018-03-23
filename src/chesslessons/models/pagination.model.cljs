@@ -11,7 +11,7 @@
 ; Atoms
 (defonce pagination (atom {
 							  :display 5
-							  :current { :visitors 0 :deleted_visitors 0 }
+							  :current { :visitors 0 :deleted_visitors 0 :anonymous_visitors 0}
 							  }))
 
 

@@ -68,7 +68,22 @@
 				 message)])))
 
 
-(defn render [visitor tab]
+(defn render_anonymous_visitor [visitor tab]
+	[:li {:key (:phone visitor)
+	  :style {:position "relative"}}
+	 [:p "Phone: " (:phone visitor)]
+	 [:p "Message: " (:message visitor)]
+	 [:p "Signed up " (render_date_diff visitor) ". (" (render_added_date visitor)")"]
+
+	 [:button.close {:type "button" :aria-label "Close"
+					 :style {:position "absolute" :right 0 :top 0}
+					 :on-click #(-delete_visitor tab (:uid visitor))}
+	  [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
+	 [:hr]
+	 ])
+
+
+(defn render_rest [visitor tab]
 	[:li {:key (:email visitor) :style {:position "relative"}}
 	 [:img {:src (:photo visitor) :width 50 :height 50}]
 	 [:p "email: " (:email visitor)]
@@ -87,3 +102,10 @@
 									 :on-click #(-restore_deleted_visitor (:uid visitor))} "Restore visitor"])
 	 [:hr]
 	 ])
+
+
+(defn render [visitor tab]
+	(case tab
+		:anonymous_visitors (render_anonymous_visitor visitor tab)
+		(render_rest visitor tab))
+	)

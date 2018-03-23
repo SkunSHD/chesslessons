@@ -12,7 +12,8 @@
 (defn visitors_size [tab]
 	(count (case @tab
 			   :visitors @visitors
-			   :deleted_visitors @deleted_visitors))
+			   :deleted_visitors @deleted_visitors
+			   :anonymous_visitors @deleted_visitors))
 	)
 
 

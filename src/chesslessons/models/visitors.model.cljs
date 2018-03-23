@@ -20,6 +20,8 @@
 (defonce deleted_visitors (atom! "[visitors.model/deleted_visitors]" '()))
 (defonce deleted_visitors_error_msg (atom! "[visitors.model/deleted_visitors_error_msg]" ""))
 
+(defonce anonymous_visitors (atom! "[visitors.model/anonymous_visitors]" '()))
+(defonce anonymous_visitors_error_msg (atom! "[visitors.model/anonymous_visitors_error_msg]" ""))
 
 ; ==================
 ; Private
@@ -53,6 +55,15 @@
 	)
 
 
+(defn set_anonymous_visitors [new_anonymous_visitors]
+	(log new_anonymous_visitors "new_anonymous_visitors")
+	(log "(-chunck_visitors_for_pagination new_anonymous_visitors)" (-chunck_visitors_for_pagination new_anonymous_visitors))
+	(let [chunked_anonymous_visitors_list (-chunck_visitors_for_pagination new_anonymous_visitors)]
+		(action! "[visitors.model/set_anonymous_visitors]" chunked_anonymous_visitors_list)
+		(reset! anonymous_visitors chunked_anonymous_visitors_list))
+	)
+
+
 (defn set_deleted_visitors_error_msg [errors]
 	(action! "[visitors.model/set_deleted_visitors_error_msg]" errors)
 	(reset! visitors_error_msg errors))
@@ -62,7 +73,8 @@
 	(let [pagination_current_page (collection_name (:current @pagination))
 		  collection_current (case collection_name
 								 :visitors @visitors
-								 :deleted_visitors @deleted_visitors)
+								 :deleted_visitors @deleted_visitors
+								 :anonymous_visitors @anonymous_visitors)
 		  ]
 		(if (> (count collection_current) 0)
 					(nth collection_current pagination_current_page))))

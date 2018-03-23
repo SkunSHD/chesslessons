@@ -19,7 +19,7 @@
 ; Atoms
 (defonce email (atom ""))
 (defonce password (atom ""))
-(defonce tab (atom :visitors)) ;:visitors :deleted_visitors
+(defonce tab (atom :visitors)) ;:visitors :deleted_visitors :anonymous_visitors
 
 
 ; ==================
@@ -66,7 +66,7 @@
 									 (search_visitors tab_key)
 									 (visitors_model/get_current_page_visitors tab_key))]
 		 (for [visitor visitors]
-			 ^{:key (:email visitor)} (visitor_component/render visitor tab_key))
+			 (visitor_component/render visitor tab_key))
 		 )
 	 ])
 
@@ -76,7 +76,9 @@
 	 [:div.card-header
 	  [:ul.nav.nav-tabs.card-header-tabs
 	   [:li.nav-item
-		[:a.nav-link.active {:on-click #(-on_tab_click_handler % :visitors)} "New"]]
+		[:a.nav-link.active {:on-click #(-on_tab_click_handler % :visitors)} "Social Network"]]
+	   [:li.nav-item
+		[:a.nav-link {:on-click #(-on_tab_click_handler % :anonymous_visitors)} "Anonymous"]]
 	   [:li.nav-item
 		[:a.nav-link {:on-click #(-on_tab_click_handler % :deleted_visitors)} "Deleted"]]]
 	  ]

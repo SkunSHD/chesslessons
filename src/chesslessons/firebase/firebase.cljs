@@ -32,6 +32,7 @@
 ; ==================
 ; Privat
 (defn delete_current_visitor_from_firebase []
+	(log "(.-currentUser (auth))" (.-currentUser (auth)))
 	(let [current_visitor (.-currentUser (auth))]
 		(.then (.delete current_visitor)
 				   #(log "visitor deleted from firebase successfully" current_visitor)

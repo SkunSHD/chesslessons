@@ -10,7 +10,7 @@
 
 (def collections {
 	 :visitors (.collection firestore "visitors")
-	 :anonymous_messages (.collection firestore "anonymous_messages")
+	 :anonymous_visitors (.collection firestore "anonymous_visitors")
 	 :deleted_visitors (.collection firestore "deleted_visitors")
 })
 
@@ -44,10 +44,11 @@
 
 
 (defn save_anonymous_message [phone message]
-	(log "db" (js-obj phone message))
-	(.catch
-		(.then (.add (:anonymous_messages collections) (js-obj "phone" phone "message" message)) #(log "save_anonymous_message success"))
-			#(log "save_anonymous_message success"))
+	(let [new_anonymous_entry (js-obj "phone" phone "message" message "timestamp" (.now js/Date))]
+		(.catch
+			(.then (.add (:anonymous_visitors collections) new_anonymous_entry) #(log "save_anonymous_message success"))
+			#(log "save_anonymous_message error" %))
+		)
 	)
 
 
