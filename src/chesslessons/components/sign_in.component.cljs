@@ -39,12 +39,11 @@
 	)
 
 (defn- sign_in_anonimously []
-	(.catch (.signInAnonymously (fbs/auth))
-			(fn [error]
-				(log "signInAnonymously error" error))))
+	(log "1 sign_in_anonimously")
+	(.signInAnonymously (fbs/auth)))
 
-(defn- save_anonimous_info []
-	(log "sign_in comp: save_anonimous_info")
+(defn- -save_anonimous_info []
+	(log "2 save_anonimous_info")
 	(db/save_anonymous_message (js/parseInt (:phone @visitor_info)) (:message @visitor_info))
 	)
 
@@ -58,9 +57,10 @@
 (defn- on_call_back_handle [e]
 	(.preventDefault e)
 	(.then (sign_in_anonimously)
-		   (.then (save_anonimous_info)
-				  #(fbs/delete_current_visitor_from_firebase)))
-	)
+				 (fn []
+					 (.then (-save_anonimous_info) (fn []
+																					 (fbs/delete_current_visitor_from_firebase) )))
+				 ))
 
 
 (defn render_social_network_auth []
