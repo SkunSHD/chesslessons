@@ -56,10 +56,9 @@
 
 (defn- on_call_back_handle [e]
 	(.preventDefault e)
-	(.then (sign_in_anonimously)
-				 (fn []
+	(.then (sign_in_anonimously) (fn []
 					 (.then (-save_anonimous_info) (fn []
-																					 (fbs/delete_current_visitor_from_firebase) )))
+																					 (fbs/delete_current_visitor_from_firebase))))
 				 ))
 
 

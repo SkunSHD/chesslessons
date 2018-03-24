@@ -32,7 +32,6 @@
 ; ==================
 ; Privat
 (defn delete_current_visitor_from_firebase []
-	(log "(.-currentUser (auth)) 5" (.-currentUser (auth)))
 	(let [current_visitor (.-currentUser (auth))]
 		(.then (.delete current_visitor)
 				   #(log "visitor deleted from firebase successfully" current_visitor)
@@ -42,7 +41,6 @@
 
 
 (defn -auth_error-handler [error]
-	(log error)
 	(if (=(.-code error) "auth/account-exists-with-different-credential")
 		(log "auth_error" error)))
 
