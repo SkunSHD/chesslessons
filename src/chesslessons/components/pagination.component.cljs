@@ -2,7 +2,7 @@
 	(:require
 ; 		Models
 		[chesslessons.pagination-model :refer [pagination set_current_pagination_page]]
-		[chesslessons.visitors-model :refer [visitors deleted_visitors]]
+		[chesslessons.visitors-model :refer [visitors deleted_visitors anonymous_visitors]]
 		))
 
 
@@ -13,7 +13,7 @@
 	(count (case @tab
 			   :visitors @visitors
 			   :deleted_visitors @deleted_visitors
-			   :anonymous_visitors @deleted_visitors))
+			   :anonymous_visitors @anonymous_visitors))
 	)
 
 
