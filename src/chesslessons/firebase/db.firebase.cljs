@@ -38,13 +38,13 @@
 	(.then (get_visitor_by_email (:email new_visitor)) (fn [visitors]
 		(if (-visitors_exists? visitors)
 		    (log "Visitor already exists: " (:email new_visitor))
-			(.set (.doc (:visitors collections) (:uid new_visitor)) (clj->js(merge new_visitor { :timestamp (.now js/Date) :visitor_message visitor_message}))) )
+			(.set (.doc (:visitors collections) (:uid new_visitor)) (clj->js (merge new_visitor { :timestamp (.now js/Date) :visitor_message visitor_message}))) )
 		))
 	)
 
 
 (defn save_anonymous_message [phone message]
-	(let [new_anonymous_entry (js-obj "phone" phone "message" message "timestamp" (.now js/Date))]
+	(let [new_anonymous_entry (clj->js {:phone phone :message message :timestamp (.now js/Date)})]
 		(.catch
 			(.then (.add (:anonymous_visitors collections) new_anonymous_entry) #(log "save_anonymous_message success"))
 			#(log "save_anonymous_message error" %))
