@@ -4,7 +4,7 @@
 ;		Models
 		[chesslessons.search-model :refer [search is_searching search_visitors]]
 		[chesslessons.admin-model :as admin_model]
-        [chesslessons.visitors-model :as visitors_model]
+		[chesslessons.visitors-model :as visitors_model]
 ;		Components
 		[chesslessons.components.pagination.component :as pagination_component]
 		[chesslessons.components.admin_search.component :refer [render_admin_search]]
@@ -94,7 +94,7 @@
 	 [:h1 "Visitors:"]
 	 [render_admin_search]
 	 [render_tab_and_visitors_container]
-	 [pagination_component/render tab]
+     (when (not (is_searching)) [pagination_component/render tab])
 	 ])
 
 

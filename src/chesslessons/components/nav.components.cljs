@@ -15,7 +15,7 @@
 	 [:span {:onClick #(nav! "/") :style {:cursor "pointer"}}
 	  (if-not (nil? @admin_model/admin)
 		  [:img {:src (:photo @admin_model/admin) :height 70 }]
-		  [:img {:src "https://pbs.twimg.com/profile_images/471961293981626368/hGiM_c_R_400x400.png" :width 70 :height 70 }])
+		  [:img {:src "https://cdn1.worldpng.ru/uploads/2018/3/25/4dc0d7601406a6114b1fe79754a3d2f5-full.png" :width 70 :height 70 }])
 	  ]
 	  (if (nil? @admin_model/admin)
           (if-not (?current_page "admin_page") [:button {:onClick #(nav! "/admin")} "Login as admin"])

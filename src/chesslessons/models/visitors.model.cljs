@@ -56,7 +56,6 @@
 
 
 (defn set_anonymous_visitors [new_anonymous_visitors]
-	(log (type new_anonymous_visitors) "before was ok" new_anonymous_visitors)
 	(let [chunked_anonymous_visitors_list (-chunck_visitors_for_pagination new_anonymous_visitors)]
 		(action! "[visitors.model/set_anonymous_visitors]" chunked_anonymous_visitors_list)
 		(reset! anonymous_visitors chunked_anonymous_visitors_list))

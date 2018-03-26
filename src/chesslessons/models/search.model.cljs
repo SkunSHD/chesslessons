@@ -2,7 +2,7 @@
 	(:require
 		[reagent.core :refer [atom cursor]]
 ; 		Models
-		[chesslessons.visitors-model :refer [visitors deleted_visitors]]
+		[chesslessons.visitors-model :refer [visitors deleted_visitors anonymous_visitors]]
 ; 		Utils
 		[clojure.string :as s]
 		))
@@ -19,19 +19,27 @@
 ; ==================
 ; Privat
 (defn- -match_visitor [visitor query]
-	(let [name (s/lower-case(:name visitor))
-		  email (s/lower-case(:email visitor))]
-
-		(or (s/includes? name  query)
-			(s/includes? email query))
-		)
+	; matching search_fields in visitor
+	(not (empty? (filter (fn [keyval]
+							 (let [key (first keyval)
+								   val (second keyval)
+								   search_fields '(:name :email :phone :message)]
+								 (when
+									 (and
+										 (some #(= % key) search_fields)
+										 val)
+									 (cond
+										 (string? val) (s/includes? (s/lower-case val) query)
+										 (number? val) (s/includes? (str val) query)))
+										 )) visitor)))
 	)
 
 
 (defn- -get_visitors_from_collection [collection_name]
 	(case collection_name
 				:visitors (flatten @visitors)
-				:deleted_visitors (flatten @deleted_visitors)))
+				:deleted_visitors (flatten @deleted_visitors)
+				:anonymous_visitors (flatten @anonymous_visitors)))
 
 
 ; ==================
