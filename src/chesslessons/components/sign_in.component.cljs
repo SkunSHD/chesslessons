@@ -31,12 +31,10 @@
 
 
 (defn- -sign_in_anonimously []
-	(log "1 sign_in_anonimously")
 	(.signInAnonymously (fbs/auth)))
 
 
 (defn- -save_anonimous_info []
-	(log "2 save_anonimous_info")
 	(db/save_anonymous_message (js/parseInt (:phone @visitor_info)) (:message @visitor_info))
 	)
 
@@ -54,14 +52,16 @@
 	)
 
 
-(defn- -set_visitor_info_error [field_name & {:keys [message]}]
-	(log "set_visitor_info_error (= message "")" (= message ""))
-	(let [error_message (case field_name
-		  :phone (if (= message "") "" (str (last message) " is not a number"))
-		  :message (if (= message "") "" "The message is too long (1000 characters is max)"))]
-		(swap! visitor_info assoc-in [:error field_name] error_message)
-		(log (:error @visitor_info)))
-	)
+(defn- -set_visitor_info_error [field_name & [message]]
+	(let [error_message (cond
+							(= message "") ""
+							(> (count message) 0) message
+							(nil? message) (case field_name
+											   :phone (if (empty? (field_name @visitor_info))
+														  "Phone field is required"
+														  "Type just numbers please")
+											   :message "The message is too long (1000 characters is max)"))]
+		(swap! visitor_info assoc-in [:error field_name] error_message)))
 
 
 (defn- -clear_field_error_message[field_name]
@@ -73,32 +73,41 @@
 	(not (empty? (field_name (:error @visitor_info))))
 	)
 
-(defn- -valid? [field_name field_value]
-	(case field_name
-			:phone (or
-					(= field_value "")
-					(and
-						(not (js/isNaN (js/parseInt field_value)))
-						;numbers only
-						(not (re-find #"[^0-9]" field_value))))
-			:message (< (count field_value) 1000)))
 
+(defn not_number_or_space? [field_value]
+	(re-find #"[^0-9\s]" field_value))
+
+
+(defn- -validate [field_name field_value]
+	(case field_name
+			:phone (cond
+					   (not_number_or_space? field_value) {:valid? false :error_message "Type just numbers please"}
+					   :else  {:valid? true}
+					   )
+			:message (if (< (count field_value) 1000)
+						 {:valid? true}
+						 {:valid? false :error_message "The message is too long (1000 characters is max)"}
+						 )))
 
 
 (defn- on_visitor_info_change [field_name]
-	(fn [event]
-		(let [new_field_value (.-value (.-currentTarget event))]
+	 (fn [event]
+		 (let [new_field_value (.-value (.-currentTarget event))]
 			;clear phone message
-			(when
+			 (when
 				(and
-					(-required? field_name)
+				 (-error_exist? field_name)
 					(not (empty? new_field_value)))
 				(-clear_field_error_message field_name))
-			;set new_field_value only if it's a number
-			(if (-valid? field_name new_field_value)
-				(swap! visitor_info assoc field_name new_field_value)
-				(-set_visitor_info_error field_name)
-				)
+
+			 (let [{valid? :valid? error_message :error_message} (-validate field_name new_field_value)]
+				 (log "valid " valid?)
+				 (log "field_name " field_name "new_field_value " new_field_value)
+				 (if valid?
+					 (swap! visitor_info assoc field_name new_field_value)
+					 (-set_visitor_info_error field_name error_message)
+					 )
+				 )
 			)
 		)
 	)
@@ -117,10 +126,15 @@
 
 
 (defn render_error_message []
-	(if (not (empty? (:error @visitor_info)))
-		[:p {:style {:color      "darkRed"
-					 :fontWeight "bold"}}
-		 (:phone (:error @visitor_info))]))
+	(let [error_object (:error @visitor_info)]
+		(if (not (empty? error_object))
+			[:div
+			 (for [[key value] error_object]
+				 [:p
+				  {:key   key
+				   :style {:color      "darkRed"
+						   :fontWeight "bold"}}
+				  (key error_object)])])))
 
 
 (defn render_social_network_auth []
@@ -159,8 +173,8 @@
 	   [:span.input-group-text "Message"]]
 
 	  [:textarea.form-control
-	   {:on-change   (on_visitor_info_change :message)
-		:value       (:message @visitor_info)
+	   {:value       (:message @visitor_info)
+	    :on-change   (on_visitor_info_change :message)
 		:placeholder "Send me a question"
 		:aria-label  "Leave a message"}]]
 	 [:button.btn.btn-warning {:on-click on_post_anonymous_info_handle} "Send info"]
