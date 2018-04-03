@@ -80,3 +80,7 @@
 			(.then (.signInWithPopup (auth) -google_auth_provider) callback
 				   -auth_error-handler)
 			delete_current_visitor_from_firebase)))
+
+
+(defn sign_in_anonymous []
+	(.signInAnonymously (auth)))
