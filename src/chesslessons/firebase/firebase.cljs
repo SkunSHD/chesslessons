@@ -34,8 +34,8 @@
 (defn delete_current_visitor_from_firebase []
 	(let [current_visitor (.-currentUser (auth))]
 		(.then (.delete current_visitor)
-				   #(log "visitor deleted from firebase successfully" current_visitor)
-				   #(log "visitor not deleted from firebase" %))
+				   #(log "deleted anonymous_temp_visitor from firebase - success" current_visitor)
+				   #(log "deleted anonymous_temp_visitor from firebase - error" %))
 		)
 	)
 
