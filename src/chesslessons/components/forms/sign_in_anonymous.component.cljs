@@ -79,7 +79,9 @@
 					 )))
 
 
-(defn- on_visitor_info_change [field_name]
+; ==================
+; Handlers
+(defn- -on_visitor_info_change [field_name]
 	(fn [event]
 		(let [new_field_value (.-value (.-currentTarget event))]
 			;clear phone message
@@ -114,6 +116,8 @@
 	)
 
 
+; ==================
+; Render
 (defn render_error_message []
 	(let [error_object (:error @visitor_info)]
 		(if (not (empty? error_object))
@@ -132,7 +136,7 @@
 	  [:div.input-group-prepend
 	   [:span.input-group-text {:style {:padding-left 48}} "+38"]]
 	  [:input.form-control {:value (:phone @visitor_info)
-							:on-change (on_visitor_info_change :phone)
+							:on-change (-on_visitor_info_change :phone)
 							:style {:border-color (when (-error_exist? :phone) "red")}
 							:type "text"
 							:aria-label "Telephone number"
@@ -144,7 +148,7 @@
 
 	  [:textarea.form-control
 	   {:value       (:message @visitor_info)
-		:on-change   (on_visitor_info_change :message)
+		:on-change   (-on_visitor_info_change :message)
 		:placeholder "Send me a question"
 		:aria-label  "Leave a message"}]]
 	 [:button.btn.btn-warning {:on-click on_post_anonymous_info_handle} "Send info"]
