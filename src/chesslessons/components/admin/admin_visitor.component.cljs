@@ -19,9 +19,15 @@
 		:deleted_visitors (db/delete_visitor_complitly uid)))
 
 
-(defn- -restore_deleted_visitor [uid]
-	(db/restore_deleted_visitor uid))
+(defn- -restore_deleted_visitor [uid restore_in_collection_name]
+	(db/restore_deleted_visitor uid restore_in_collection_name))
 
+
+(defn- -current_tab [tab visitor]
+	(if (:is_anonymous visitor)
+		:anonymous_visitors
+		:visitors)
+	)
 
 ; ==================
 ; Public
@@ -53,10 +59,11 @@
 
 (defn render_admin_visitor_message [visitor]
 	(let [read_more_atom (atom false)
-		  message        (:visitor_message visitor)
+		  message        (:message visitor)
 		  is_long_text?  (> (count message) 70)]
 		(fn []
-			[:p
+			(if message
+				[:p
 			 [:span
 			  (merge-with into {:style {:paddingRight 10}}
 						  (if is_long_text?
@@ -66,26 +73,33 @@
 
 			 (if (and is_long_text? (not @read_more_atom))
 				 (str (subs message 0 70) " ...")
-				 message)])))
+				 message)]))))
 
 
-(defn render_anonymous_visitor [visitor tab]
-	[:li {:key (:uid visitor)
-	  :style {:position "relative"}}
-	 [:img {:src (:photo visitor) :width 50 :height 50}]
-	 [:p "Phone: " (:phone visitor)]
-	 [:p "Message: " (:message visitor)]
-	 [:p "Signed up " (render_date_diff visitor) ". (" (render_added_date visitor)")"]
-
-	 [:button.close {:type "button" :aria-label "Close"
-					 :style {:position "absolute" :right 0 :top 0}
-					 :on-click #(-delete_visitor tab (:uid visitor))}
-	  [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
-	 [:hr]
-	 ])
+(defn render_delete_button [visitor tab]
+	(let [current_tab (-current_tab tab visitor)]
+		[:button.close {:type "button" :aria-label "Close"
+						:style {:position "absolute" :right 0 :top 0}
+						:on-click #(-delete_visitor current_tab (:uid visitor))}
+		 [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
+		)
+	)
 
 
-(defn render_rest [visitor tab]
+(defn render_restore_button [visitor tab]
+	(let [current_tab (-current_tab tab visitor)
+		  deleted_visitors_tab? (= tab :deleted_visitors)]
+		(if deleted_visitors_tab?
+					[:button.btn.btn-secondary {:type "button"
+										:style {:position "absolute" :right 0 :bottom 20}
+										:on-click #(-restore_deleted_visitor (:uid visitor) current_tab)} "Restore visitor"]
+
+			)
+		)
+		)
+
+
+(defn render_visitor_any [visitor tab]
 	[:li {:key (:uid visitor) :style {:position "relative"}}
 	 [:img {:src (:photo visitor) :width 50 :height 50}]
 	 (if (:email visitor) [:p "email: " (:email visitor)])
@@ -94,21 +108,13 @@
 	 [:p "Signed up " (render_date_diff visitor) ". (" (render_added_date visitor)")"]
 	 [render_admin_visitor_message visitor]
 	 [render_admin_visitor_link visitor]
-	 [:button.close {:type "button" :aria-label "Close"
-					 :style {:position "absolute" :right 0 :top 0}
-					 :on-click #(-delete_visitor tab (:uid visitor))}
-	  [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
-
-	 (if (= tab :deleted_visitors)
-		 [:button.btn.btn-secondary {:type "button"
-									 :style {:position "absolute" :right 0 :bottom 20}
-									 :on-click #(-restore_deleted_visitor (:uid visitor))} "Restore visitor"])
+	 [render_delete_button visitor tab]
+	 [render_restore_button visitor tab]
 	 [:hr]
 	 ])
 
 
 (defn render [visitor tab]
 	(case tab
-		:anonymous_visitors (render_anonymous_visitor visitor tab)
-		(render_rest visitor tab))
+		(render_visitor_any visitor tab))
 	)

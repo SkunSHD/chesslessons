@@ -22,6 +22,10 @@
 	             (fn [visitor] (aget visitor "exists"))
 	             (js->clj (aget visitors "docs"))))))
 
+(defn- -save_deliting_visitor [visitor]
+	(let [visitor_data (.data visitor)]
+		(.set (.doc (:deleted_visitors collections) (aget visitor_data "uid")) visitor_data))
+	)
 
 ; ==================
 ; Public
@@ -38,7 +42,7 @@
 	(.then (get_visitor_by_email (:email new_visitor)) (fn [visitors]
 		(if (-visitors_exists? visitors)
 		    (log "Visitor already exists: " (:email new_visitor))
-			(.set (.doc (:visitors collections) (:uid new_visitor)) (clj->js (merge new_visitor { :timestamp (.now js/Date) :visitor_message visitor_message}))) )
+			(.set (.doc (:visitors collections) (:uid new_visitor)) (clj->js (merge new_visitor { :timestamp (.now js/Date) :message visitor_message}))) )
 		))
 	)
 
@@ -46,6 +50,7 @@
 (defn save_anonymous_message [phone message]
 	(let [timestamp (.now js/Date) uid (str phone timestamp) new_anonymous_entry (clj->js
 																					 {:uid    uid
+																					  :is_anonymous true
 																					  :phone     phone
 																					  :message   message
 																					  :timestamp timestamp
@@ -57,14 +62,8 @@
 	)
 
 
-(defn save_deleted_visitor [visitor]
-	(let [visitor_data (.data visitor)]
-		(.set (.doc (:deleted_visitors collections) (aget visitor_data "uid")) visitor_data))
-	)
-
-
 (defn backup_visitor [uid collection_name]
-	(.then (get_visitor_by_uid uid collection_name) save_deleted_visitor))
+	(.then (get_visitor_by_uid uid collection_name) -save_deliting_visitor))
 
 
 (defn delete_visitor [uid collection_name]
@@ -82,7 +81,7 @@
 	)
 
 
-(defn restore_deleted_visitor [uid]
+(defn restore_deleted_visitor [uid restore_in_collection_name]
 	; 1 read visitor from deleted collection
 	; 2 write visitor in normal collection
 	; 3 delete visitor from deleted collection
@@ -90,7 +89,7 @@
 		   (fn [deleted_visitor]
 
 			   (let [deleted_visitor_data  (.data deleted_visitor)]
-				   (.then (.set (.doc (:visitors collections) (aget deleted_visitor_data "uid")) deleted_visitor_data)
+				   (.then (.set (.doc (restore_in_collection_name collections) (aget deleted_visitor_data "uid")) deleted_visitor_data)
 					   #(delete_visitor_complitly uid)))))
 	)
 
