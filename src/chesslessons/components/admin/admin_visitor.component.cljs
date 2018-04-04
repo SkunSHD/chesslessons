@@ -14,7 +14,8 @@
 ; Privat
 (defn- -delete_visitor [collection_name uid]
 	(case collection_name
-		:visitors (db/delete_visitor uid)
+		:visitors (db/delete_visitor uid collection_name)
+		:anonymous_visitors (db/delete_visitor uid collection_name)
 		:deleted_visitors (db/delete_visitor_complitly uid)))
 
 
@@ -69,8 +70,9 @@
 
 
 (defn render_anonymous_visitor [visitor tab]
-	[:li {:key (:phone visitor)
+	[:li {:key (:uid visitor)
 	  :style {:position "relative"}}
+	 [:img {:src (:photo visitor) :width 50 :height 50}]
 	 [:p "Phone: " (:phone visitor)]
 	 [:p "Message: " (:message visitor)]
 	 [:p "Signed up " (render_date_diff visitor) ". (" (render_added_date visitor)")"]
@@ -84,10 +86,11 @@
 
 
 (defn render_rest [visitor tab]
-	[:li {:key (:email visitor) :style {:position "relative"}}
+	[:li {:key (:uid visitor) :style {:position "relative"}}
 	 [:img {:src (:photo visitor) :width 50 :height 50}]
-	 [:p "email: " (:email visitor)]
-	 [:p "name: " (:name visitor)]
+	 (if (:email visitor) [:p "email: " (:email visitor)])
+	 (if (:name visitor) [:p "name: " (:name visitor)])
+	 (if (:phone visitor) [:p "phone: " (:phone visitor)])
 	 [:p "Signed up " (render_date_diff visitor) ". (" (render_added_date visitor)")"]
 	 [render_admin_visitor_message visitor]
 	 [render_admin_visitor_link visitor]

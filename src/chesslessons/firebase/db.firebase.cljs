@@ -29,8 +29,8 @@
 	(.get (.where (:visitors collections) "email" "==" email)))
 
 
-(defn get_visitor_by_uid [uid]
-	(.get (.doc (:visitors collections) uid)))
+(defn get_visitor_by_uid [uid collection_name]
+	(.get (.doc (collection_name collections) uid)))
 
 
 (defn save_visitor [new_visitor visitor_message]
@@ -44,9 +44,14 @@
 
 
 (defn save_anonymous_message [phone message]
-	(let [new_anonymous_entry (clj->js {:phone phone :message message :timestamp (.now js/Date)})]
+	(let [timestamp (.now js/Date) uid (str phone timestamp) new_anonymous_entry (clj->js
+																					 {:uid    uid
+																					  :phone     phone
+																					  :message   message
+																					  :timestamp timestamp
+																					  :photo "https://anac.mx/wp-content/uploads/2016/08/no_image_user.png"})]
 		(.catch
-			(.then (.add (:anonymous_visitors collections) new_anonymous_entry) #(log "save_anonymous_message success"))
+			(.then (.set (.doc (:anonymous_visitors collections) uid) new_anonymous_entry) #(log "save_anonymous_message success"))
 			#(log "save_anonymous_message error" %))
 		)
 	)
@@ -58,13 +63,13 @@
 	)
 
 
-(defn backup_visitor [uid]
-	(.then (get_visitor_by_uid uid) save_deleted_visitor))
+(defn backup_visitor [uid collection_name]
+	(.then (get_visitor_by_uid uid collection_name) save_deleted_visitor))
 
 
-(defn delete_visitor [uid]
-	(.then (backup_visitor uid) (fn []
-			(.then (.delete (.doc (:visitors collections) uid))
+(defn delete_visitor [uid collection_name]
+	(.then (backup_visitor uid collection_name) (fn []
+			(.then (.delete (.doc (collection_name collections) uid))
 				   #(log "delete visitor success, uid:" uid)
 			   #(log "delete visitor error" %))))
 	)
