@@ -19,7 +19,7 @@
 ; Atoms
 (defonce email (atom ""))
 (defonce password (atom ""))
-(defonce tab (atom :visitors)) ;:visitors :deleted_visitors :anonymous_visitors
+(defonce tab (atom :all_visitors)) ;:visitors :deleted_visitors :anonymous_visitors
 
 
 ; ==================
@@ -47,16 +47,27 @@
 		))
 
 
-(defn- -toggle_active_class [new_el]
-	(let [old_el_class_list  (.-classList (.querySelector js/document ".nav-link.active"))]
-		(if (.-length old_el_class_list) (do
-											 (.remove old_el_class_list "active")
-											 (.add (.-classList new_el) "active")))))
+(defn- -toggle_active_class [new_el toggledClass]
+	(let [old_elem_query (.querySelector js/document toggledClass)]
+		(if old_elem_query
+			(let [same_el? (= (.-innerText new_el) (.-innerText old_elem_query))]
+				(.remove (.-classList old_elem_query) "active")
+				(if-not same_el? (.add (.-classList new_el) "active"))
+				)
+			(.add (.-classList new_el) "active"))))
+
 
 (defn- -on_tab_click_handler [event tab_name]
 	(.preventDefault event)
 	(reset! tab tab_name)
-	(-toggle_active_class (.-target event))
+	(-toggle_active_class (.-target event) ".nav-link.active")
+	)
+
+
+(defn- -on_filter_click_handler [event tab_name]
+	(.preventDefault event)
+	(reset! tab (if (and (not= @tab :all_visitors) (= @tab tab_name)) :all_visitors tab_name))
+	(-toggle_active_class (.-target event) ".filter-link.active")
 	)
 
 
@@ -71,18 +82,26 @@
 	 ])
 
 
+(defn render_filters []
+	[:div "Visitors filter:"
+		[:button.btn.btn-info.filter-link {:on-click #(-on_filter_click_handler % :visitors)} "Social Network"]
+		[:button.btn.btn-info.filter-link {:on-click #(-on_filter_click_handler % :anonymous_visitors)} "Anonymous"]
+	 	[render_admin_search]
+	 ]
+	)
+
+
 (defn render_tab_and_visitors_container []
 	[:div.card.text-center
 	 [:div.card-header
 	  [:ul.nav.nav-tabs.card-header-tabs
 	   [:li.nav-item
-		[:a.nav-link.active {:on-click #(-on_tab_click_handler % :visitors)} "Social Network"]]
-	   [:li.nav-item
-		[:a.nav-link {:on-click #(-on_tab_click_handler % :anonymous_visitors)} "Anonymous"]]
+		[:a.nav-link.active {:on-click #(-on_tab_click_handler % :all_visitors)} "All visitors"]]
 	   [:li.nav-item
 		[:a.nav-link {:on-click #(-on_tab_click_handler % :deleted_visitors)} "Deleted"]]]
 	  ]
 	 [:div.card-body
+	  [render_filters]
 	  [render_admin_visitors]]
 	 ])
 
@@ -92,7 +111,6 @@
 (defn render_admin_container []
 	[:div
 	 [:h1 "Visitors:"]
-	 [render_admin_search]
 	 [render_tab_and_visitors_container]
      (when (not (is_searching)) [pagination_component/render tab])
 	 ])

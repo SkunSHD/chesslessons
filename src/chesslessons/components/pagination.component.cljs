@@ -2,7 +2,7 @@
 	(:require
 ; 		Models
 		[chesslessons.pagination-model :refer [pagination set_current_pagination_page]]
-		[chesslessons.visitors-model :refer [visitors deleted_visitors anonymous_visitors]]
+		[chesslessons.visitors-model :refer [visitors deleted_visitors anonymous_visitors get_all_visitors]]
 		))
 
 
@@ -11,9 +11,11 @@
 
 (defn visitors_size [tab]
 	(count (case @tab
+			   :all_visitors (get_all_visitors)
 			   :visitors @visitors
+			   :anonymous_visitors @anonymous_visitors
 			   :deleted_visitors @deleted_visitors
-			   :anonymous_visitors @anonymous_visitors))
+			   ))
 	)
 
 

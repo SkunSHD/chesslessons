@@ -35,7 +35,7 @@
 
 
 ; ==================
-; Actions
+; Public
 (defn set_visitors [new_visitors]
 	(let [chunked_visitors_list (-chunck_visitors_for_pagination new_visitors)]
 		(action! "[visitors.model/set_visitors]" chunked_visitors_list)
@@ -67,12 +67,21 @@
 	(reset! visitors_error_msg errors))
 
 
+(defn get_all_visitors []
+	(let [current_all_visitors (concat (flatten @visitors) (flatten @anonymous_visitors))]
+		(-chunck_visitors_for_pagination (sort-by :timestamp > current_all_visitors))
+		)
+	)
+
+
 (defn get_current_page_visitors [collection_name]
 	(let [pagination_current_page (collection_name (:current @pagination))
 		  collection_current (case collection_name
+								 :all_visitors (get_all_visitors)
 								 :visitors @visitors
+								 :anonymous_visitors @anonymous_visitors
 								 :deleted_visitors @deleted_visitors
-								 :anonymous_visitors @anonymous_visitors)
+								 )
 		  ]
 		(if (> (count collection_current) 0)
 					(nth collection_current pagination_current_page))))
