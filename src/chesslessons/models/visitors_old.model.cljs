@@ -1,4 +1,4 @@
-(ns chesslessons.visitors-model
+(ns chesslessons.visitors_old-model
 	(:require
 		[chesslessons.firebase.db :as db]
 ;		Utils
@@ -25,6 +25,7 @@
 
 ; ==================
 ; Private
+; TODO: Find out after refuck - am I using this shit anywhere?
 (defn- -format_visitors [visitors]
 	(map (fn [visitor] (js->clj (.data visitor) :keywordize-keys true))
 	     (aget visitors "docs")))

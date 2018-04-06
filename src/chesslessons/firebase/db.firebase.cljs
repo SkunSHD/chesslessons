@@ -10,7 +10,6 @@
 
 (def collections {
 	 :visitors (.collection firestore "visitors")
-	 :anonymous_visitors (.collection firestore "anonymous_visitors")
 	 :deleted_visitors (.collection firestore "deleted_visitors")
 })
 

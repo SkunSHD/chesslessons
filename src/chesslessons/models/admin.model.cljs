@@ -67,8 +67,7 @@
 			(action! (str "[visitors.model/on_collection_change] " collection_name)  visitors_formatted)
 			(case collection_name
 				:visitors (visitors_model/set_visitors  visitors_formatted)
-				:deleted_visitors (visitors_model/set_deleted_visitors  visitors_formatted)
-				:anonymous_visitors (visitors_model/set_anonymous_visitors  visitors_formatted))
+				:deleted_visitors (visitors_model/set_deleted_visitors  visitors_formatted))
 			)
 	)
 )
@@ -85,7 +84,6 @@
 (defn -add_db_change_listeners []
 	(-add_collection_change_listener :visitors)
 	(-add_collection_change_listener :deleted_visitors)
-	(-add_collection_change_listener :anonymous_visitors)
 	)
 
 

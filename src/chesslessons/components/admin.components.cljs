@@ -19,7 +19,7 @@
 ; Atoms
 (defonce email (atom ""))
 (defonce password (atom ""))
-(defonce tab (atom :all_visitors)) ;:visitors :deleted_visitors :anonymous_visitors
+(defonce tab (atom :all_visitors)) ;:visitors :deleted_visitors
 
 
 ; ==================

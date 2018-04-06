@@ -2,7 +2,7 @@
 	(:require
 		[reagent.core :refer [atom cursor]]
 ; 		Models
-		[chesslessons.visitors-model :refer [visitors deleted_visitors anonymous_visitors]]
+		[chesslessons.visitors-model :refer [visitors deleted_visitors]]
 ; 		Utils
 		[clojure.string :as s]
 		))
@@ -38,8 +38,7 @@
 (defn- -get_visitors_from_collection [collection_name]
 	(case collection_name
 				:visitors (flatten @visitors)
-				:deleted_visitors (flatten @deleted_visitors)
-				:anonymous_visitors (flatten @anonymous_visitors)))
+				:deleted_visitors (flatten @deleted_visitors)))
 
 
 ; ==================

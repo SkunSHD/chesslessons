@@ -15,7 +15,6 @@
 (defn- -delete_visitor [collection_name uid]
 	(case collection_name
 		:visitors (db/delete_visitor uid collection_name)
-		:anonymous_visitors (db/delete_visitor uid collection_name)
 		:deleted_visitors (db/delete_visitor_complitly uid)))
 
 
